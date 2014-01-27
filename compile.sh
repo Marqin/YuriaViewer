@@ -1,3 +1,4 @@
 # TODO: cmake
 
-clang -lGLEW -lglfw -lGL -lGLU -Wall -Werror -Wextra -pedantic -O2 callbacks.c main.c -o bin/YuriaViewer
+mkdir -p bin
+clang -lm -lGLEW -lglfw -lGL -lGLU -Wall -Werror -Wextra -pedantic -O2 fractal.c callbacks.c main.c -o bin/YuriaViewer
