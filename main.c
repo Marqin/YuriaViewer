@@ -113,8 +113,7 @@ int main(void)
   
   glewExperimental = GL_TRUE; // need for VAO
   if(glewInit() != GLEW_OK)
-    return -1;
-  glViewport(0, 0, 640,480);
+    exit(EXIT_FAILURE);
   
   load();
   render(&window);
