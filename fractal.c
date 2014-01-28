@@ -84,7 +84,7 @@ color point_color(double x, double y, pstates* prog)
     new.i = 2.0 * old.r * old.i + prog->con.i;
   }
   
-  if (i >= 100)
+  if (i >= prog->vis)
     result = hsv2rgb(((double)i)/prog->maxi * 360.0, 0.6f, 1.0f);
   else
   { 

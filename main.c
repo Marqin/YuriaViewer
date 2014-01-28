@@ -152,9 +152,10 @@ int main(void)
   prog.h = 480; // window resize
   prog.zoom = 1;
   prog.posX = prog.posY = 0;
-  prog.con.r = -0.8;
-  prog.con.i =  0.156;
+  prog.con.r =  0.285;
+  prog.con.i =  0.01;
   prog.maxi = 1000;
+  prog.vis = 50;
   //** SAMPLE END **//
   
   GLFWwindow* window=NULL;
