@@ -146,17 +146,23 @@ void input(pstates *prog)
   scanf("%lf", &prog->con.i);
   puts("Max iterations:");
   scanf("%d", &prog->maxi);
-  puts("USAGE:");
-  puts("Arrow keys - move.");
-  puts("z - zoom in, x - zoom out");
+}
+
+void help()
+{
+  puts("\nUSAGE:");
+  puts("arrow keys - move");
+  puts("z/x - zoom in/out");
+  puts("c/v - decrease/increase number of colors");
+  puts("d - print debug information");
+  puts("h - this help\n");
 }
 
 int main(void)
 {
-  // todo: --help ?
-
   pstates prog;  
-
+  prog.help = &help;
+  
   input(&prog);
   
   //** SAMPLE BEGIN **//
