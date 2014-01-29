@@ -161,7 +161,6 @@ void help()
 int main(void)
 {
   pstates prog;  
-  prog.help = &help;
   
   input(&prog);
   

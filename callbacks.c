@@ -16,6 +16,8 @@
 
 #include "includes.h"
 
+extern void help();
+
 extern void error_callback(int error, const char* description)
 {
   printf("%d: %s\n", error, description);
@@ -69,7 +71,7 @@ extern void key_callback(GLFWwindow* window, int key, int scancode _UNUSED_, int
       break;
 
     case GLFW_KEY_H:
-      (prog->help)();
+      help();
       break;
       
     default:
