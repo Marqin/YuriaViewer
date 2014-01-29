@@ -19,6 +19,7 @@
 
 extern void error_callback(int error, const char* description);
 extern void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+extern void resize_callback(GLFWwindow* window, int width, int height);
 extern color point_color(double x, double y, pstates* prog);
 
 int init(GLFWwindow** window, int width, int height)
@@ -87,21 +88,27 @@ void render(GLFWwindow** window)
     
     // TODO: do it with dynamic-size structs
     // because h*w can excess max tab size.
-    int i =0,j=0;
-    GLfloat Vertices[2 * (prog->w +10) * (prog->h +10)];
-    GLfloat Colors[3 * (prog->w +10)  * (prog->h +10)];
-    
-    // ugly ugly
-    for(double x = -1; x < 1; x+= 2.0/prog->h)
-      for(double y = -1; y < 1; y+=2.0/prog->w)
+    int i=0, j=0;
+    size_t vs, cs;
+    vs = sizeof(GLfloat)*(2 * (prog->w) * (prog->h));
+    cs = sizeof(GLfloat)*(3 * (prog->w) * (prog->h));
+    GLfloat* Vertices = (GLfloat*) malloc(sizeof(GLfloat)*(2 * (prog->w) * (prog->h)));
+    GLfloat* Colors = (GLfloat*) malloc (sizeof(GLfloat)*(3 * (prog->w)  * (prog->h)));
+
+    GLfloat a = -1.0,b = -1.0;
+    for(int x = 0; x < prog->w; x++, a += 2.0/prog->w)
+    {
+      for(int y = 0; y < prog->h; y++, b += 2.0/prog->h)
       {
-        Vertices[j] = y;
-        Vertices[j+1] = x;
+        Vertices[j]=a;
+        Vertices[j+1]=b;
         j+=2;
       }
-    
-    for(int y = 0; y < prog->h; y++)
-      for(int x = 0; x < prog->w; x++)
+      b = -1.0;
+    }
+
+    for(int x = 0; x < prog->w; x++)
+      for(int y = 0; y < prog->h; y++)
       {
         color kol = point_color((double) x, (double) y, prog);
         Colors[i] = (float) kol.r;
@@ -113,14 +120,14 @@ void render(GLFWwindow** window)
   // Vertex Buffer Objects
   glGenBuffers(1, &vboId);
   glBindBuffer(GL_ARRAY_BUFFER, vboId);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vs, Vertices, GL_STATIC_DRAW);
   glVertexAttribPointer(0,2, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(0);
   
   // Color Buffer
   glGenBuffers(1, &colorBufferId);
   glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, cs, Colors, GL_STATIC_DRAW);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(1);
     
@@ -132,7 +139,8 @@ void render(GLFWwindow** window)
   // Process events
   glfwPollEvents();
   
-  
+  free(Vertices);
+  free(Colors);
   
   }
   
@@ -164,13 +172,13 @@ int main(void)
   
   input(&prog);
   
-  //** SAMPLE BEGIN **//
-  prog.w = 640; // TODO:
-  prog.h = 480; // window resize
+  //** INIT BEGIN **//
+  prog.w = 640;
+  prog.h = 480;
   prog.zoom = 1;
   prog.posX = prog.posY = 0;
   prog.vis = 50;
-  //** SAMPLE END **//
+  //** INIT END **//
   
   GLFWwindow* window=NULL;
   glfwSetErrorCallback(error_callback);
@@ -179,6 +187,7 @@ int main(void)
     exit(EXIT_FAILURE);
 
   glfwSetKeyCallback(window, key_callback);
+  glfwSetWindowSizeCallback(window, resize_callback);
   glfwSetWindowUserPointer(window, &prog);
   glfwMakeContextCurrent(window);
   

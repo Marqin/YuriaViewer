@@ -70,7 +70,7 @@ double c_abs(complex c)
 
 color point_color(double x, double y, pstates* prog)
 {    
-  complex  new, old;
+  complex new, old;
   int i;
   color result;
   
@@ -80,7 +80,7 @@ color point_color(double x, double y, pstates* prog)
   for(i = 0; i < prog->maxi && c_abs(new) <= 4.0; i++)
   {
     old = new;    
-    new.r = old.r*old.r - old.i*old.i + prog->con.r;
+    new.r = old.r * old.r - old.i * old.i + prog->con.r;
     new.i = 2.0 * old.r * old.i + prog->con.i;
   }
   

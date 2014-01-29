@@ -79,3 +79,11 @@ extern void key_callback(GLFWwindow* window, int key, int scancode _UNUSED_, int
   }
   
 }
+
+extern void resize_callback(GLFWwindow* window, int width, int height)
+{
+  pstates * prog = (pstates*) glfwGetWindowUserPointer(window);
+  if(prog == NULL) return;
+  prog->w = width;
+  prog->h = height;
+}
