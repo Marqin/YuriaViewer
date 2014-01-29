@@ -17,6 +17,7 @@
 #include "includes.h"
 
 extern void help();
+extern void render(GLFWwindow** window);
 
 extern void error_callback(int error, const char* description)
 {
@@ -35,35 +36,43 @@ extern void key_callback(GLFWwindow* window, int key, int scancode _UNUSED_, int
   switch(key)
   {
     case GLFW_KEY_Z:
-      prog->zoom *= 2.0;   
+      prog->zoom *= 2.0;
+      render(&window);
       break;
       
     case GLFW_KEY_X:
       prog->zoom /= 2.0;
+      render(&window);
       break;
       
     case GLFW_KEY_LEFT:
       prog->posX -= 1.0/prog->zoom;
+      render(&window);
       break;
       
     case GLFW_KEY_RIGHT:
       prog->posX += 1.0/prog->zoom;
+      render(&window);
       break;
             
     case GLFW_KEY_DOWN:
       prog->posY -= 1.0/prog->zoom;
+      render(&window);
       break;
             
     case GLFW_KEY_UP:
       prog->posY += 1.0/prog->zoom;
+      render(&window);
       break;
 
     case GLFW_KEY_C:
       prog->vis += 10;
+      render(&window);
       break;
 
     case GLFW_KEY_V:
       prog->vis -= 10;
+      render(&window);
       break;
 
     case GLFW_KEY_D:
@@ -87,4 +96,12 @@ extern void resize_callback(GLFWwindow* window, int width, int height)
   prog->w = width;
   prog->h = height;
   glViewport(0, 0, (GLint)width, (GLint)height);
+  render(&window);
 }
+
+extern void iconify_callback(GLFWwindow * window, int iconified)
+{
+  if(iconified == GL_FALSE)
+    render(&window);
+}
+

@@ -20,7 +20,9 @@
 extern void error_callback(int error, const char* description);
 extern void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 extern void resize_callback(GLFWwindow* window, int width, int height);
+extern void iconify_callback(GLFWwindow * window, int iconified);
 extern color point_color(double x, double y, pstates* prog);
+
 
 int init(GLFWwindow** window, int width, int height)
 {
@@ -44,9 +46,7 @@ int init(GLFWwindow** window, int width, int height)
 }
 
 void load()
-{
-  // TODO: error handling
-  
+{  
   GLuint vaoId, vertexShaderId,
   fragmentShaderId,  programId;
         
@@ -75,25 +75,19 @@ void load()
 
 void render(GLFWwindow** window)
 {
-  // TODO: error handling
+    pstates * prog = (pstates*) glfwGetWindowUserPointer(*window);
+    if(prog == NULL) return; // need better error handling
   
-  GLuint vboId, colorBufferId;
-
-  pstates * prog = (pstates*) glfwGetWindowUserPointer(*window);
-  if(prog == NULL) return; // need better error handling
-  
-  while (!glfwWindowShouldClose(*window))
-  {
+    GLuint vboId, colorBufferId;
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // TODO: do it with dynamic-size structs
-    // because h*w can excess max tab size.
     int i=0, j=0;
-    size_t vs, cs;
-    vs = sizeof(GLfloat)*(2 * (prog->w) * (prog->h));
-    cs = sizeof(GLfloat)*(3 * (prog->w) * (prog->h));
-    GLfloat* Vertices = (GLfloat*) malloc(sizeof(GLfloat)*(2 * (prog->w) * (prog->h)));
-    GLfloat* Colors = (GLfloat*) malloc (sizeof(GLfloat)*(3 * (prog->w)  * (prog->h)));
+    size_t s_Vertices, s_Colors;
+    s_Vertices = sizeof(GLfloat)*(2 * (prog->w) * (prog->h));
+    s_Colors = sizeof(GLfloat)*(3 * (prog->w) * (prog->h));
+    GLfloat* Vertices = (GLfloat*) malloc(s_Vertices);
+    GLfloat* Colors = (GLfloat*) malloc (s_Colors);
 
     GLfloat a = -1.0,b = -1.0;
     for(int x = 0; x < prog->w; x++, a += 2.0/prog->w)
@@ -110,29 +104,28 @@ void render(GLFWwindow** window)
     for(int x = 0; x < prog->w; x++)
       for(int y = 0; y < prog->h; y++)
       {
-        color kol = point_color((double) x, (double) y, prog);
-        Colors[i] = (float) kol.r;
-        Colors[i+1] = (float) kol.g;
-        Colors[i+2] = (float) kol.b;
+        color point = point_color((double) x, (double) y, prog);
+        Colors[i] = (float) point.r;
+        Colors[i+1] = (float) point.g;
+        Colors[i+2] = (float) point.b;
         i+=3;
       }
   
   // Vertex Buffer Objects
   glGenBuffers(1, &vboId);
   glBindBuffer(GL_ARRAY_BUFFER, vboId);
-  glBufferData(GL_ARRAY_BUFFER, vs, Vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, s_Vertices, Vertices, GL_STATIC_DRAW);
   glVertexAttribPointer(0,2, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(0);
   
   // Color Buffer
   glGenBuffers(1, &colorBufferId);
   glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-  glBufferData(GL_ARRAY_BUFFER, cs, Colors, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, s_Colors, Colors, GL_STATIC_DRAW);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(1);
-    
+  
   // Draw
-  // TODO: check for MAX_GLsizei problems
   glDrawArrays(GL_POINTS, 0, prog->h * prog->w);    
   glfwSwapBuffers(*window);
   
@@ -140,11 +133,20 @@ void render(GLFWwindow** window)
   glDeleteBuffers(1, &vboId);
   glDeleteBuffers(1, &colorBufferId);
   free(Vertices);
-  free(Colors);
+  free(Colors);  
+}
 
-  // Process events
-  glfwPollEvents();
-
+void mainloop(GLFWwindow** window)
+{
+  render(window);
+  
+  while (!glfwWindowShouldClose(*window))
+  {
+    
+    // Process events
+    glfwWaitEvents();
+    glfwPollEvents();
+  
   }
   
 }
@@ -191,6 +193,8 @@ int main(void)
 
   glfwSetKeyCallback(window, key_callback);
   glfwSetWindowSizeCallback(window, resize_callback);
+  glfwSetWindowIconifyCallback(window, iconify_callback);
+  
   glfwSetWindowUserPointer(window, &prog);
   glfwMakeContextCurrent(window);
   
@@ -200,7 +204,7 @@ int main(void)
   
   load();
   
-  render(&window);
+  mainloop(&window);
   
   glfwDestroyWindow(window);
   glfwTerminate();
