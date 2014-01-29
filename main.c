@@ -136,12 +136,15 @@ void render(GLFWwindow** window)
   glDrawArrays(GL_POINTS, 0, prog->h * prog->w);    
   glfwSwapBuffers(*window);
   
-  // Process events
-  glfwPollEvents();
-  
+  // Free memory
+  glDeleteBuffers(1, &vboId);
+  glDeleteBuffers(1, &colorBufferId);
   free(Vertices);
   free(Colors);
-  
+
+  // Process events
+  glfwPollEvents();
+
   }
   
 }

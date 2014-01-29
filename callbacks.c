@@ -86,4 +86,5 @@ extern void resize_callback(GLFWwindow* window, int width, int height)
   if(prog == NULL) return;
   prog->w = width;
   prog->h = height;
+  glViewport(0, 0, (GLint)width, (GLint)height);
 }
