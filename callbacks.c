@@ -56,6 +56,18 @@ extern void key_callback(GLFWwindow* window, int key, int scancode _UNUSED_, int
       prog->posY += 1.0/prog->zoom;
       break;
 
+    case GLFW_KEY_C:
+      prog->vis += 10;
+      break;
+
+    case GLFW_KEY_V:
+      prog->vis -= 10;
+      break;
+
+    case GLFW_KEY_D:
+      printf("%lf x:%lf y:%lf v:%d\n", prog->zoom, prog->posX, prog->posY,prog->vis);
+      break;
+
     default:
       break;
   }

@@ -138,23 +138,32 @@ void render(GLFWwindow** window)
   
 }
 
-int main(void)
+void input(pstates *prog)
 {
-  // todo: --help
+  puts("Real part of const:");
+  scanf("%lf", &prog->con.r);
+  puts("Imaginary part of const:");
+  scanf("%lf", &prog->con.i);
+  puts("Max iterations:");
+  scanf("%d", &prog->maxi);
   puts("USAGE:");
   puts("Arrow keys - move.");
   puts("z - zoom in, x - zoom out");
-  
-  pstates prog;
+}
+
+int main(void)
+{
+  // todo: --help ?
+
+  pstates prog;  
+
+  input(&prog);
   
   //** SAMPLE BEGIN **//
   prog.w = 640; // TODO:
   prog.h = 480; // window resize
   prog.zoom = 1;
   prog.posX = prog.posY = 0;
-  prog.con.r =  0.285;
-  prog.con.i =  0.01;
-  prog.maxi = 1000;
   prog.vis = 50;
   //** SAMPLE END **//
   
