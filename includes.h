@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define _BSD_SOURCE
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <unistd.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

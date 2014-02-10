@@ -3,7 +3,14 @@ Copyright 2014 - Hubert Jarosz
 simple (yet) Julia set explorer written in C99
 
 Prerequisites (probably not all):
-  * OpenGL 4.1 (or higher)
+  * OpenGL 4.1 (higher should work)
   * clang (gcc should work)
   * GLFW 3
   * GLEW, GLU
+
+Compilation commands used by developer are
+in files compile_<OS>.sh (and there
+are plans to use cmake in future).
+
+To list all avalible commands press 'h'
+while displaying a set.
