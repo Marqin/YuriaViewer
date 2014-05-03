@@ -17,14 +17,15 @@
 #include "includes.h"
 #include "shaders.h"
 
-extern void error_callback(int error, const char* description);
-extern void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-extern void resize_callback(GLFWwindow* window, int width, int height);
-extern void iconify_callback(GLFWwindow * window, int iconified);
-extern color point_color(double x, double y, pstates* prog);
+extern void error_callback(int error, const char *description);
+extern void key_callback(GLFWwindow *window, int key, int scancode, int action,
+                         int mods);
+extern void resize_callback(GLFWwindow *window, int width, int height);
+extern void iconify_callback(GLFWwindow *window, int iconified);
+extern color point_color(double x, double y, pstates *prog);
 
 
-int init(GLFWwindow** window, int width, int height)
+int init(GLFWwindow **window, int width, int height)
 {
 	if (!glfwInit())
 		return 1;
@@ -45,10 +46,10 @@ int init(GLFWwindow** window, int width, int height)
 	return 0;
 }
 
-void load()
-{  
+void load(void)
+{
 	GLuint vaoId, vertexShaderId,
-	       fragmentShaderId,programId;
+	       fragmentShaderId, programId;
 
 	// Vertex Array Obj
 
@@ -72,9 +73,9 @@ void load()
 	glUseProgram(programId);
 }
 
-void render(GLFWwindow** window)
+void render(GLFWwindow **window)
 {
-	pstates * prog = (pstates*) glfwGetWindowUserPointer(*window);
+	pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
 	if(prog == NULL)
 		return; // need better error handling
 
@@ -82,21 +83,21 @@ void render(GLFWwindow** window)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	int i=0, j=0;
+	int i = 0, j = 0;
 	size_t s_Vertices, s_Colors;
-	s_Vertices = sizeof(GLfloat)*(2 * (prog->w) * (prog->h));
-	s_Colors = sizeof(GLfloat)*(3 * (prog->w) * (prog->h));
-	GLfloat* Vertices = (GLfloat*) malloc(s_Vertices);
-	GLfloat* Colors = (GLfloat*) malloc (s_Colors);
+	s_Vertices = sizeof(GLfloat) * (2 * (prog->w) * (prog->h));
+	s_Colors = sizeof(GLfloat) * (3 * (prog->w) * (prog->h));
+	GLfloat *Vertices = (GLfloat *) malloc(s_Vertices);
+	GLfloat *Colors = (GLfloat *) malloc(s_Colors);
 
-	GLfloat a = -1.0,b = -1.0;
+	GLfloat a = -1.0, b = -1.0;
 	for(int x = 0; x < prog->w; x++, a += 2.0/prog->w)
 	{
 		for(int y = 0; y < prog->h; y++, b += 2.0/prog->h)
- 		{
-			Vertices[j]=a;
-			Vertices[j+1]=b;
-			j+=2;
+		{
+			Vertices[j] = a;
+			Vertices[j+1] = b;
+			j += 2;
 		}
 		b = -1.0;
 	}
@@ -105,17 +106,17 @@ void render(GLFWwindow** window)
 		for(int y = 0; y < prog->h; y++)
 		{
 			color point = point_color((double) x, (double) y, prog);
-   			Colors[i] = (float) point.r;
+			Colors[i] = (float) point.r;
 			Colors[i+1] = (float) point.g;
 			Colors[i+2] = (float) point.b;
-			i+=3;
+			i += 3;
 		}
 
 	// Vertex Buffer Objects
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	glBufferData(GL_ARRAY_BUFFER, s_Vertices, Vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0,2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 
 	// Color Buffer
@@ -136,7 +137,7 @@ void render(GLFWwindow** window)
 	free(Colors);
 }
 
-void mainloop(GLFWwindow** window)
+void mainloop(GLFWwindow **window)
 {
 	render(window);
 
@@ -157,7 +158,7 @@ void input(pstates *prog)
 	scanf("%d", &prog->maxi);
 }
 
-void help()
+void help(void)
 {
 	puts("\nUSAGE:");
 	puts("arrow keys - move");
@@ -181,7 +182,7 @@ int main(void)
 	prog.vis = 50;
 	//** INIT END **//
 
-	GLFWwindow* window=NULL;
+	GLFWwindow *window = NULL;
 	glfwSetErrorCallback(error_callback);
 
 	if(init(&window, prog.w, prog.h))

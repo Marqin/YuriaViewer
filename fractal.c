@@ -84,14 +84,16 @@ double c_abs(complex c)
 	return abs(c.r*c.r + c.i*c.i);
 }
 
-color point_color(double x, double y, pstates* prog)
+color point_color(double x, double y, pstates *prog)
 {
 	complex new, old;
 	int i;
 	color result;
 
-	new.r = 1.5 * (x - prog->w / 2.0) / (0.5 * prog->zoom * prog->w) + prog->posX * 0.5;
-	new.i = (y - prog->h / 2.0) / (0.5 * prog->zoom * prog->h) + prog->posY * 0.5;
+	new.r = 1.5 * (x - prog->w / 2.0) / (0.5 * prog->zoom * prog->w)
+                + prog->posX * 0.5;
+	new.i = (y - prog->h / 2.0) / (0.5 * prog->zoom * prog->h)
+                + prog->posY * 0.5;
 
 	for(i = 0; i < prog->maxi && c_abs(new) <= 4.0; i++)
 	{
@@ -101,11 +103,11 @@ color point_color(double x, double y, pstates* prog)
 	}
 
 	if (i >= prog->vis)
-		result = hsv2rgb(((double)i)/prog->maxi * 360.0, 0.6f, 1.0f);
+		result = hsv2rgb(((double) i)/prog->maxi * 360.0, 0.6f, 1.0f);
 	else
 	{
 		result.r = result.g = result.b = 0.0;
-  	}
+	}
 
 	return result;
 }

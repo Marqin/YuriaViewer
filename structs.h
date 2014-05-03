@@ -17,7 +17,7 @@
 #pragma once
 
 typedef struct color {
-	double r,g,b;
+	double r, g, b;
 } color;
 
 typedef struct complex {
