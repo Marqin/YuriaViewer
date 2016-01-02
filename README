@@ -1,16 +1,13 @@
-Copyright 2014, 2016 - Hubert Jarosz
+# YuriaViewer
+
+[![Build Status](https://travis-ci.org/Marqin/YuriaViewer.svg)](https://travis-ci.org/Marqin/YuriaViewer)
 
 simple (yet) Julia set explorer written in C99
 
 Prerequisites (probably not all):
   * OpenGL 4.1 (higher should work)
-  * clang (gcc should work)
   * GLFW 3
   * GLEW, GLU
-
-Compilation commands used by developer are
-in files compile_<OS>.sh (and there
-are plans to use cmake in future).
 
 To list all avalible commands press 'h'
 while displaying a set.

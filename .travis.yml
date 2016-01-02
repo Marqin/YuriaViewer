@@ -1,0 +1,36 @@
+language: c
+
+sudo: required
+dist: trusty
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - clang
+  - gcc
+
+matrix:
+  include:
+    - os: linux
+      compiler: clang
+      env: ANALYZE=true
+    - os: linux
+      compiler: gcc
+      env: MUSL=true
+    - os: osx
+      compiler: clang
+      env: ANALYZE=true
+
+before_script:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -qq; sudo apt-get install -qq libglfw3-dev libglew-dev; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install -v glfw3 glew; fi
+  - export SCAN_BUILD=""
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$ANALYZE" = "true" ]; then sudo apt-get update -qq; sudo apt-get install -qq clang-3.5; export SCAN_BUILD=scan-build-3.5; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$MUSL" = "true" ]; then sudo apt-get update -qq; sudo apt-get install -qq musl-tools; export CC=musl-gcc; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ] && [ "$ANALYZE" = "true" ]; then brew update; brew install -v llvm37; export SCAN_BUILD=scan-build-3.7; fi
+
+script:
+  - $SCAN_BUILD make CC=$CC
+  - 'stat --printf="Binary size for $CC: %s bytes\n" ./bin/YuriaViewer'
