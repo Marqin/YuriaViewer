@@ -1,8 +1,5 @@
 language: c
 
-sudo: required
-dist: trusty
-
 os:
   - linux
   - osx
@@ -33,4 +30,4 @@ before_script:
 
 script:
   - $SCAN_BUILD make CC=$CC
-  - 'stat --printf="Binary size for $CC: %s bytes\n" ./bin/YuriaViewer'
+  - 'if [ "$TRAVIS_OS_NAME" = "linux" ]; then stat --printf="Binary size for $CC: %s bytes\n" ./bin/YuriaViewer; fi'
