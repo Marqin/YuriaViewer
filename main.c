@@ -140,12 +140,25 @@ void mainloop(GLFWwindow **window)
 
 void input(pstates *prog)
 {
-	puts("Real part of const:");
-	scanf("%lf", &prog->con.r);
-	puts("Imaginary part of const:");
-	scanf("%lf", &prog->con.i);
-	puts("Max iterations:");
-	scanf("%d", &prog->maxi);
+	int s = 0;
+
+	printf("Real part of const: ");
+	fflush(stdout);
+	s = scanf("%lf", &prog->con.r);
+	if( !s )
+		prog->con.r = 0.0;
+
+	printf("Imaginary part of const: ");
+	fflush(stdout);
+	s = scanf("%lf", &prog->con.i);
+	if( !s )
+		prog->con.i = 0.0;
+
+	printf("Max iterations: ");
+	fflush(stdout);
+	s = scanf("%d", &prog->maxi);
+	if( !s )
+		prog->maxi = 0;
 }
 
 void help(void)

@@ -7,7 +7,6 @@ CC = gcc
 CCFlags = -Wall -Werror -Wextra -pedantic -O2 -std=c99
 Source = fractal.c callbacks.c main.c
 Headers = includes.h shaders.h structs.h
-Libs =
 
 OS_NAME = $(shell uname -s)
 ifeq ($(OS_NAME), Darwin)
