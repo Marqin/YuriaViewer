@@ -138,27 +138,15 @@ void mainloop(GLFWwindow **window)
 	}
 }
 
-void input(pstates *prog)
+int input(pstates *prog)
 {
 	int s = 0;
 
-	printf("Real part of const: ");
-	fflush(stdout);
-	s = scanf("%lf", &prog->con.r);
-	if( !s )
-		prog->con.r = 0.0;
+	s += get_double("Real part of const: ", &prog->con.r);
+	s += get_double("Imaginary part of const: ", &prog->con.i);
+	s += get_int("Max iterations: ", &prog->maxi);
 
-	printf("Imaginary part of const: ");
-	fflush(stdout);
-	s = scanf("%lf", &prog->con.i);
-	if( !s )
-		prog->con.i = 0.0;
-
-	printf("Max iterations: ");
-	fflush(stdout);
-	s = scanf("%d", &prog->maxi);
-	if( !s )
-		prog->maxi = 0;
+	return s;
 }
 
 void help(void)
@@ -173,17 +161,13 @@ void help(void)
 
 int main(void)
 {
-	pstates prog;
+	pstates prog = init_pstates();
 
-	input(&prog);
-
-	//** INIT BEGIN **//
-	prog.w = 640;
-	prog.h = 480;
-	prog.zoom = 1;
-	prog.posX = prog.posY = 0;
-	prog.vis = 50;
-	//** INIT END **//
+	if(input(&prog) != 3)
+	{
+		puts("Erroneous input.");
+		return 1;
+	}
 
 	GLFWwindow *window = NULL;
 	glfwSetErrorCallback(error_callback);

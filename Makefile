@@ -5,8 +5,8 @@
 
 CC = gcc
 CCFlags = -Wall -Werror -Wextra -pedantic -O2 -std=c99
-Source = fractal.c callbacks.c main.c
-Headers = includes.h shaders.h structs.h
+Source = fractal.c callbacks.c main.c utils.c
+Headers = includes.h shaders.h structs.h utils.h
 
 OS_NAME = $(shell uname -s)
 ifeq ($(OS_NAME), Darwin)

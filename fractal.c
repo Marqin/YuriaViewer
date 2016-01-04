@@ -10,14 +10,11 @@ color hsv2rgb(float hue, float sat, float val)
 {
 	int a;
 	float b, c, d, e;
-	color result;
+	color black = new_color(0l, 0l, 0l);
 
 	if(val == 0)
 	{
-		result.r = 0;
-		result.g = 0;
-		result.b = 0;
-		return result;
+		return black;
 	}
 
 	hue /= 60;
@@ -30,43 +27,25 @@ color hsv2rgb(float hue, float sat, float val)
 	switch(a)
 	{
 	case 0:
-		result.r = val;
-		result.g = e;
-		result.b = c;
-		break;
+		return new_color(val, e, c);
 
 	case 1:
-		result.r = d;
-		result.g = val;
-		result.b = c;
-		break;
+		return new_color(d, val, c);
 
 	case 2:
-		result.r = c;
-		result.g = val;
-		result.b = e;
-		break;
+		return new_color(c, val, e);
 
 	case 3:
-		result.r = c;
-		result.g = d;
-		result.b = val;
-		break;
+		return new_color(c, d, val);
 
 	case 4:
-		result.r = e;
-		result.g = c;
-		result.b = val;
-		break;
+		return new_color(e, c, val);
 
 	case 5:
-		result.r = val;
-		result.g = c;
-		result.b = d;
-		break;
+		return new_color(val, c, d);
 	}
 
-	return result;
+	return black;
 }
 
 double c_abs(complex c)
@@ -78,7 +57,7 @@ color point_color(double x, double y, pstates *prog)
 {
 	complex new, old;
 	int i;
-	color result;
+	color result = new_color(0l, 0l, 0l);
 
 	new.r = 1.5 * (x - prog->w / 2.0) / (0.5 * prog->zoom * prog->w)
                 + prog->posX * 0.5;
@@ -93,10 +72,8 @@ color point_color(double x, double y, pstates *prog)
 	}
 
 	if (i >= prog->vis)
-		result = hsv2rgb(((double) i)/prog->maxi * 360.0, 0.6f, 1.0f);
-	else
 	{
-		result.r = result.g = result.b = 0.0;
+		result = hsv2rgb(((double) i)/prog->maxi * 360l, 0.6l, 1.0l);
 	}
 
 	return result;
