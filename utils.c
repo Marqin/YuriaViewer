@@ -8,7 +8,7 @@
 
 int get_int(const char * const text, int * i)
 {
-	printf(text);
+	printf("%s", text);
 	fflush(stdout);
 	int s = scanf("%d", i);
 	return s;
@@ -16,7 +16,7 @@ int get_int(const char * const text, int * i)
 
 int get_double(const char * const text, double * d)
 {
-	printf(text);
+	printf("%s", text);
 	fflush(stdout);
 	int s = scanf("%lf", d);
 	return s;
