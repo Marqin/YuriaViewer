@@ -14,7 +14,7 @@ typedef struct complex {
 } complex;
 
 typedef struct program_states {
-	double zoom, posX, posY;
 	int w, h, maxi, vis;
-	complex con;
+	double zoom, posX, posY;
+	float con[2];
 } pstates;

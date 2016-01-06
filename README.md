@@ -6,6 +6,7 @@ simple (yet) Julia set explorer written in C99
 
 Prerequisites (probably not all):
   * OpenGL 4.1 (higher should work)
+  * GPU with GL_ARB_gpu_shader_fp64 support
   * GLFW 3
   * GLEW, GLU
 

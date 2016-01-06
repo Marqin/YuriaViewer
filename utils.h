@@ -9,7 +9,7 @@
 
 int get_int(const char * const text, int * i);
 
-int get_double(const char * const text, double * d);
+int get_float(const char * const text, float * f);
 
 complex new_complex(double r, double i);
 

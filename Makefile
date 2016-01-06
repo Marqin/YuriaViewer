@@ -4,8 +4,8 @@
 #
 
 CC = gcc
-CCFlags = -Wall -Werror -Wextra -pedantic -O2 -std=c99
-Source = fractal.c callbacks.c main.c utils.c
+CCFlags = -Wall -Werror -Wextra -pedantic -std=c99 -g
+Source = callbacks.c main.c utils.c shaders.c
 Headers = includes.h shaders.h structs.h utils.h
 
 OS_NAME = $(shell uname -s)
