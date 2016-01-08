@@ -1,5 +1,9 @@
 language: c
 
+notifications:
+  email: false
+
+
 sudo: required
 dist: trusty
 
