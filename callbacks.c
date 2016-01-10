@@ -80,7 +80,7 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 	}
 }
 
-extern void resize_callback(GLFWwindow *window, int width, int height)
+extern void resize_callback(GLFWwindow *window, int32_t width, int32_t height)
 {
 	pstates *prog = (pstates *) glfwGetWindowUserPointer(window);
 	if(prog == NULL)

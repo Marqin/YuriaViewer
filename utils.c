@@ -6,7 +6,7 @@
 
 #include "includes.h"
 
-int get_int(const char * const text, int * i)
+int get_int(const char * const text, int32_t * i)
 {
 	printf("%s", text);
 	fflush(stdout);

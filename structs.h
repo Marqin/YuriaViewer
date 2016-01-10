@@ -5,8 +5,10 @@
 
 #pragma once
 
+#include <stdint.h>
+
 typedef struct program_states {
-	int w, h, maxi, vis;
+	int32_t w, h, maxi, vis;
 	double zoom, posX, posY;
 	float con[2];
 } pstates;

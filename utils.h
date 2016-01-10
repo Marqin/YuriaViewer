@@ -7,7 +7,9 @@
 
 #include "structs.h"
 
-int get_int(const char * const text, int * i);
+#include <stdint.h>
+
+int get_int(const char * const text, int32_t * i);
 
 int get_float(const char * const text, float * f);
 
