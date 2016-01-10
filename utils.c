@@ -22,14 +22,6 @@ int get_float(const char * const text, float * d)
 	return s;
 }
 
-complex new_complex(double r, double i)
-{
-	complex c;
-	c.r = r;
-	c.i = i;
-	return c;
-}
-
 pstates init_pstates()
 {
 	pstates p;
@@ -47,13 +39,4 @@ pstates init_pstates()
 	p.con[1] = 0.0;
 
 	return p;
-}
-
-color new_color(double r, double g, double b)
-{
-	color c;
-	c.r = r;
-	c.g = g;
-	c.b = b;
-	return c;
 }

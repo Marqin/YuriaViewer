@@ -11,8 +11,4 @@ int get_int(const char * const text, int * i);
 
 int get_float(const char * const text, float * f);
 
-complex new_complex(double r, double i);
-
 pstates init_pstates();
-
-color new_color(double r, double g, double b);

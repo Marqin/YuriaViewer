@@ -5,14 +5,6 @@
 
 #pragma once
 
-typedef struct color {
-	double r, g, b;
-} color;
-
-typedef struct complex {
-	double r, i;
-} complex;
-
 typedef struct program_states {
 	int w, h, maxi, vis;
 	double zoom, posX, posY;
