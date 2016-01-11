@@ -10,13 +10,13 @@ layout (std140) uniform ProgData
   vec2 con;
 };
 
-dvec3 color(in vec2 pos)
+vec3 color(in vec2 pos)
 {
   pos.x = ( pos.x + 1.0 ) / ( 2.0/w );
   pos.y = ( pos.y + 1.0 ) / ( 2.0/h );
-  dvec2 new, old;
+  vec2 new, old;
   int i;
-  dvec3 result = dvec3(0.0, 0.0, 0.0);
+  vec3 result = vec3(0.0, 0.0, 0.0);
   new.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + posX * 0.5;
   new.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + posY * 0.5;
 
@@ -29,15 +29,15 @@ dvec3 color(in vec2 pos)
 
   if (i >= vis)
   {
-    result = dvec3((i+0.0)/maxi, 0.6, 1.0);
+    result = vec3((i+0.0)/maxi, 0.6, 1.0);
   }
   return result;
 }
 
-dvec3 hsv2rgb(in dvec3 c)
+vec3 hsv2rgb(in vec3 c)
 {
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  dvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
