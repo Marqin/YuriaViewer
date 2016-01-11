@@ -9,7 +9,7 @@
 GLchar * getShader (const char * const path)
 {
 	char * buffer = NULL;
-	long length;
+	size_t length;
 	FILE * f = fopen (path, "rb");
 
 	if (f)
@@ -18,12 +18,16 @@ GLchar * getShader (const char * const path)
 		length = ftell (f);
 		fseek (f, 0, SEEK_SET);
 		buffer = calloc (length+1, sizeof(char));
-		for( int i = 0; i < length+1; i++ ) {
+		for( size_t i = 0; i < length+1; i++ ) {
 			buffer[i] = '\0';
 		}
 		if (buffer)
 		{
-			fread (buffer, 1, length, f);
+			size_t status = fread (buffer, 1, length, f);
+			if( status != length ) {
+				fprintf(stderr, "Error while reading \"%s\" file!\n", path);
+				buffer[0] = '\0';
+			}
 		}
 		fclose (f);
 	}
