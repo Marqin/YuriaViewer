@@ -4,22 +4,19 @@
 #
 
 CC = gcc
-CCFlags = -Wall -Werror -Wextra -pedantic -std=c99 -g
+Warnings = -pedantic -Wall -Wextra -Wshadow -Wstrict-overflow
+override CFLAGS += $(Warnings) -Werror -std=c99 -Os -O2 -fno-strict-aliasing
 Source = callbacks.c main.c utils.c shaders.c
 Headers = includes.h shaders.h structs.h utils.h
-
-OS_NAME = $(shell uname -s)
-ifeq ($(OS_NAME), Darwin)
-  Libs = -lm -lGLEW -lglfw3 -framework QuartzCore -framework IOKit -framework OpenGL -framework Cocoa
-else
-  Libs = -lm -lGLEW -lglfw -lGL -lGLU
-endif
+LibsHeaders = $(shell pkg-config --static --cflags glew) $(shell pkg-config --static --cflags glfw3)
+Libs = $(shell pkg-config --static --libs glew) $(shell pkg-config --static --libs glfw3) -lm
+Dist = ./bin
 
 .PHONY: all clean
 
-bin/YuriaViewer: Makefile $(Source) $(Headers)
-	mkdir -p bin
-	$(CC) $(CCFlags) $(Source) $(Libs) -o bin/YuriaViewer
+$(Dist)/YuriaViewer: Makefile $(Source) $(Headers)
+	mkdir -p "$(Dist)"
+	$(CC) $(CFLAGS) $(Source) $(LibsHeaders) $(Libs) -o $(Dist)/YuriaViewer
 
 clean:
-	if [ -d "./bin" ]; then rm -r ./bin; fi
+	if [ -d "$(Dist)" ]; then rm -r -- "$(Dist)"; fi
