@@ -9,6 +9,10 @@
 
 typedef struct program_states {
 	int32_t w, h, maxi, vis;
-	double zoom, posX, posY;
+	#ifdef single
+		float zoom, posX, posY, offset;
+	#else
+		double zoom, posX, posY;
+	#endif
 	float con[2];
 } pstates;

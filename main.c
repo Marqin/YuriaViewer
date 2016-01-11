@@ -46,7 +46,11 @@ void load(void)
 	glBindVertexArray(vaoId);
 
 	// Shaders
-	const GLchar * vs = getShader("vertex.glsl");
+  #ifdef single
+	 const GLchar * vs = getShader("single.glsl");
+  #else
+    const GLchar * vs = getShader("vertex.glsl");
+  #endif
 	const GLchar * fs = getShader("fragment.glsl");
 
 	vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
