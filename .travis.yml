@@ -26,7 +26,7 @@ matrix:
 
 before_script:
   - export SCAN_BUILD=""
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install -v glfw3 glew; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install -v homebrew/versions/glfw3 glew; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$ANALYZE" = "true" ]; then sudo apt-get update -qq; sudo apt-get install -qq clang-3.5; export SCAN_BUILD=scan-build-3.5; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ] && [ "$ANALYZE" = "true" ]; then brew update; brew install -v llvm37; export SCAN_BUILD=scan-build-3.7; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository 'deb http://us.archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse'; fi
