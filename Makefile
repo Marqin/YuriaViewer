@@ -5,7 +5,7 @@
 
 CC = gcc
 Warnings = -pedantic -Wall -Wextra -Wshadow -Wstrict-overflow
-CFLAGS = $(Warnings) -Werror -std=c99 -Os -O2 -fno-strict-aliasing
+override CFLAGS += $(Warnings) -Werror -std=c99 -Os -O2 -fno-strict-aliasing
 Source = callbacks.c main.c utils.c shaders.c
 Headers = includes.h shaders.h structs.h utils.h
 LibsHeaders = $(shell pkg-config --static --cflags glew) $(shell pkg-config --static --cflags glfw3)
