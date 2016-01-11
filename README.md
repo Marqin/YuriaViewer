@@ -8,6 +8,7 @@ Prerequisites (probably not all):
   * OpenGL 4.1 (higher should work)
   * GLFW 3
   * GLEW, GLU
+  * pkg-config
 
 To list all avalible commands press 'h' while displaying a set.
 
