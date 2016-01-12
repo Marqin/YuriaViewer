@@ -8,24 +8,8 @@ layout (std140) uniform ProgData
 {
   int w, h, maxi, vis;
   double zoom, posX, posY;
-  vec2 con;
+  vec2 c;
 };
-
-vec2 c_pow( in dvec2 c, in double n )
-{
-  double r = length( c );
-  double fi = atan( c.y/c.x );
-  r = pow(r, n);
-  fi *= n;
-  return dvec2( r*cos(fi), r*sin(fi) );
-}
-
-vec2 c_exp( in vec2 c )
-{
-  float r = exp( c.y );
-  float fi = atan( c.y/c.x );
-  return vec2( r*cos(fi), r*sin(fi) );
-}
 
 dvec3 color(in vec2 pos)
 {
@@ -41,9 +25,11 @@ dvec3 color(in vec2 pos)
   int i;
   for(i = 0; i < maxi && length(z) <= 2.0; i++)
   {
-    z = c_pow(z, 2) + con;
-    //z = c_pow(z, 7) + vec2(0.626, 0.0);    // experiments
-    //z = c_exp(c_pow(z,2)) - vec2(0.65, 0); // experiments
+    double tmp = z.x * z.y;
+    z.x = z.x * z.x - z.y * z.y;
+    z.y = 2.0 * tmp;
+
+    z += c;
   }
 
   if (i >= vis)
