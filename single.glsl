@@ -13,6 +13,10 @@ layout (std140) uniform ProgData
 vec2 c_pow( in vec2 c, in float n )
 {
   float r = length( c );
+  if( r == 0 )
+  {
+    return vec2(0,0);
+  }
   float fi = atan( c.y/c.x );
   r = pow(r, n);
   fi *= n;
@@ -36,6 +40,10 @@ vec3 color(in vec2 pos)
   vec2 z;
   z.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + posX * 0.5;
   z.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + posY * 0.5;
+
+  // uncomment to get Mandelbrot set
+  //vec2 c = z;
+  //z = vec2(0,0);
 
   int i;
   for(i = 0; i < maxi && length(z) <= 2.0; i++)
