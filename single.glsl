@@ -1,7 +1,6 @@
 #version 410
 
-in vec2 in_Position;
-out vec3 ex_Color;
+out vec4 ex_Color;
 
 layout (std140) uniform ProgData
 {
@@ -32,9 +31,6 @@ vec2 c_exp( in vec2 c )
 
 vec3 color(in vec2 pos)
 {
-  pos.x = ( pos.x + 1.0 ) / ( 2.0/w );
-  pos.y = ( pos.y + 1.0 ) / ( 2.0/h );
-
   vec3 result = vec3(0.0, 0.0, 0.0);
 
   vec2 z;
@@ -69,6 +65,6 @@ vec3 hsv2rgb(in vec3 c)
 
 void main()
 {
-  gl_Position = vec4(in_Position, 0.0, 1.0);
-  ex_Color = vec3(hsv2rgb(color(in_Position)));
+  vec3 col = hsv2rgb(color( gl_FragCoord.xy  ));
+  ex_Color = vec4(col, 1.0);
 }

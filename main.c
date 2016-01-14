@@ -25,7 +25,7 @@ int init(GLFWwindow **window, int width, int height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	*window = glfwCreateWindow(width, height, "YuriaView 0.2", NULL, NULL);
+	*window = glfwCreateWindow(width, height, "YuriaView 0.3", NULL, NULL);
 
 	if (!(*window))
 	{
@@ -47,11 +47,11 @@ void load(void)
 
 	// Shaders
   #ifdef single
-	 const GLchar * vs = getShader("single.glsl");
+    const GLchar * fs = getShader("single.glsl");
   #else
-    const GLchar * vs = getShader("vertex.glsl");
+    const GLchar * fs = getShader("fragment.glsl");
   #endif
-	const GLchar * fs = getShader("fragment.glsl");
+  const GLchar * vs = getShader("vertex.glsl");
 
 	vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShaderId, 1, &vs, NULL);
@@ -111,28 +111,20 @@ void render(GLFWwindow **window)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	int i = 0;
-	size_t s_Vertices;;
-	s_Vertices = sizeof(GLfloat) * (2 * (prog->w) * (prog->h));
-	GLfloat *Vertices = (GLfloat *) malloc(s_Vertices);
-
-	GLfloat a = -1.0, b = -1.0;
-	for(int x = 0; x < prog->w; x++, a += 2.0/prog->w)
-	{
-		for(int y = 0; y < prog->h; y++, b += 2.0/prog->h)
-		{
-			Vertices[i] = a;
-			Vertices[i+1] = b;
-			i += 2;
-		}
-		b = -1.0;
-	}
+  GLfloat Vertices[12] = {
+      -1.0, -1.0,
+       1.0, -1.0,
+      -1.0,  1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+       1.0,  1.0
+  };
 
 
 	// Vertex Buffer Objects
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, s_Vertices, Vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 12*sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -147,13 +139,12 @@ void render(GLFWwindow **window)
 
 
 	// Draw
-	glDrawArrays(GL_POINTS, 0, prog->h * prog->w);
+	glDrawArrays(GL_TRIANGLES, 0, 6);//prog->h * prog->w);
 	glfwSwapBuffers(*window);
 
 	// Free memory
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &uniformBufferId);
-	free(Vertices);
 }
 
 void mainloop(GLFWwindow **window)
