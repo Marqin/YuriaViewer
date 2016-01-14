@@ -16,7 +16,7 @@ To list all avalible commands press 'h' while displaying a set.
 
 `make` - builds Yuria Viewer
 
-`make CCFlags=-Dsingle` - builds Yuria Viewer in single-precision mode
+`make CFLAGS=-Dsingle` - builds Yuria Viewer in single-precision mode
 
 `make clean` - cleans build directory
 
