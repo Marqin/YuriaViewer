@@ -16,5 +16,7 @@
 
 #include "utils.h"
 #include "structs.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #define _UNUSED_ __attribute__ ((unused))

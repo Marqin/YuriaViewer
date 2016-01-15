@@ -8,9 +8,12 @@
 #include "structs.h"
 
 #include <stdint.h>
+#include <stdbool.h>
 
 int get_int(const char * const text, int32_t * i);
 
 int get_float(const char * const text, float * f);
 
 pstates init_pstates();
+
+bool isOK( GLuint, const char * const );

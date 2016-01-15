@@ -27,32 +27,34 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 	if(action == GLFW_PRESS) switch(key)
 	{
 	case GLFW_KEY_Z:
-		prog->zoom *= 2.0;
+		prog->zoom_64 *= 2.0;
+		prog->zoom_32 = prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_X:
-		prog->zoom /= 2.0;
+		prog->zoom_64 /= 2.0;
+		prog->zoom_32 = prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_LEFT:
-		prog->posX -= 1.0/prog->zoom;
+		prog->pos[0] -= 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_RIGHT:
-		prog->posX += 1.0/prog->zoom;
+		prog->pos[0] += 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_DOWN:
-		prog->posY -= 1.0/prog->zoom;
+		prog->pos[1] -= 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_UP:
-		prog->posY += 1.0/prog->zoom;
+		prog->pos[1] += 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
@@ -68,7 +70,7 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 
 	case GLFW_KEY_D:
 		printf("z:%lf x:%lf y:%lf v:%d\n",
-		       prog->zoom, prog->posX, prog->posY, prog->vis);
+		       prog->zoom_64, prog->pos[0], prog->pos[1], prog->vis);
 		break;
 
 	case GLFW_KEY_H:
@@ -86,8 +88,8 @@ extern void resize_callback(GLFWwindow *window, int32_t width, int32_t height)
 	if(prog == NULL)
 		return;
 
-	prog->w = width;
-	prog->h = height;
+	prog->res[0] = width;
+	prog->res[1] = height;
 	glViewport(0, 0, (GLint)width, (GLint)height);
 	render(&window);
 }

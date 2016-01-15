@@ -8,11 +8,9 @@
 #include <stdint.h>
 
 typedef struct program_states {
-	int32_t w, h, maxi, vis;
-	#ifdef single
-		float zoom, posX, posY, offset;
-	#else
-		double zoom, posX, posY;
-	#endif
-	float con[2];
+	int32_t maxi, vis;
+	uint32_t res[2];
+	float con[2], pos[2];
+	float zoom_32, offset;
+	double zoom_64;
 } pstates;

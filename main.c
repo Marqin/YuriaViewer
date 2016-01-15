@@ -15,7 +15,7 @@ extern void iconify_callback(GLFWwindow *window, int iconified);
 
 #define BINDING_POINT_INDEX 2
 
-int init(GLFWwindow **window, int width, int height)
+int init(GLFWwindow **window, uint32_t res[2])
 {
 	if (!glfwInit())
 		return 1;
@@ -25,7 +25,7 @@ int init(GLFWwindow **window, int width, int height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	*window = glfwCreateWindow(width, height, "YuriaView 0.3", NULL, NULL);
+	*window = glfwCreateWindow(res[0], res[1], "YuriaView 0.3", NULL, NULL);
 
 	if (!(*window))
 	{
@@ -38,7 +38,8 @@ int init(GLFWwindow **window, int width, int height)
 
 void load(void)
 {
-	GLuint programId, vaoId, vertexShaderId, fragmentShaderId;
+	GLuint programId, vaoId, vertexShaderId,
+         fragment32ShaderId, fragment64ShaderId;
 
 	// Vertex Array Obj
 
@@ -46,53 +47,46 @@ void load(void)
 	glBindVertexArray(vaoId);
 
 	// Shaders
-  #ifdef single
-    const GLchar * fs = getShader("single.glsl");
-  #else
-    const GLchar * fs = getShader("fragment.glsl");
-  #endif
+  const GLchar * fs_32 = getShader("fragment_32.glsl");
+  const GLchar * fs_64 = getShader("fragment_64.glsl");
   const GLchar * vs = getShader("vertex.glsl");
 
 	vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShaderId, 1, &vs, NULL);
 	glCompileShader(vertexShaderId);
+  if( ! isOK(vertexShaderId, "vertex shader") )
+  {
+    glDeleteShader(vertexShaderId);
+    return;
+  }
 
-	fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fs, NULL);
-	glCompileShader(fragmentShaderId);
+	fragment32ShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment32ShaderId, 1, &fs_32, NULL);
+	glCompileShader(fragment32ShaderId);
+  if( ! isOK(fragment32ShaderId, "fragment_32 shader") )
+  {
+    glDeleteShader(fragment32ShaderId);
+    return;
+  }
 
-	GLint isCompiled = 0;
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &isCompiled);
-	if(isCompiled == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
-
-		GLchar errorLog[maxLength];
-		glGetShaderInfoLog(fragmentShaderId, maxLength, &maxLength, &errorLog[0]);
-		printf( "Fragment Shader ERR: %s\n", errorLog );
-
-		glDeleteShader(fragmentShaderId); // Don't leak the shader.
-		return;
-	}
-
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &isCompiled);
-	if(isCompiled == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
-
-		GLchar errorLog[maxLength];
-		glGetShaderInfoLog(vertexShaderId, maxLength, &maxLength, &errorLog[0]);
-		printf( "Vertex Shader ERR: %s\n", errorLog );
-
-		glDeleteShader(vertexShaderId); // Don't leak the shader.
-		return;
-	}
+  fragment64ShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragment64ShaderId, 1, &fs_64, NULL);
+  glCompileShader(fragment64ShaderId);
+  if( ! isOK(fragment64ShaderId, "fragment_64 shader") )
+  {
+    glDeleteShader(fragment64ShaderId);
+    return;
+  }
 
 	programId = glCreateProgram();
 	glAttachShader(programId, vertexShaderId);
-	glAttachShader(programId, fragmentShaderId);
+
+  #ifdef single
+    glAttachShader(programId, fragment32ShaderId);
+  #else
+    glAttachShader(programId, fragment64ShaderId);
+  #endif
+
 
 	glLinkProgram(programId);
 	glUseProgram(programId);
@@ -192,7 +186,7 @@ int main(void)
 	GLFWwindow *window = NULL;
 	glfwSetErrorCallback(error_callback);
 
-	if(init(&window, prog.w, prog.h))
+	if(init(&window, prog.res))
 		exit(EXIT_FAILURE);
 
 	glfwSetKeyCallback(window, key_callback);

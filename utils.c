@@ -26,12 +26,13 @@ pstates init_pstates()
 {
 	pstates p;
 
-	p.zoom = 1l;
-	p.posX = 0l;
-	p.posY = 0l;
+	p.zoom_32 = 1.0;
+	p.zoom_64 = 1.0;
+	p.pos[0] = 0l;
+	p.pos[1] = 0l;
 
-	p.w = 800;
-	p.h = 600;
+	p.res[0] = 800;
+	p.res[1] = 600;
 	p.maxi = 0;
 	p.vis = 50;
 
@@ -39,4 +40,22 @@ pstates init_pstates()
 	p.con[1] = 0.0;
 
 	return p;
+}
+
+bool isOK( GLuint shaderId, const char * const name )
+{
+	GLint isCompiled = 0;
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &isCompiled);
+	if(isCompiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		GLchar errorLog[maxLength];
+		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
+		printf( "%s: %s\n", name, errorLog );
+
+		return false;
+	}
+	return true;
 }

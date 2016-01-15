@@ -5,18 +5,23 @@ out vec4 ex_Color;
 
 layout (std140) uniform ProgData
 {
-  int w, h, maxi, vis;
-  double zoom, posX, posY;
-  vec2 c;
+  int maxi, vis;
+  uvec2 resolution;
+  vec2 complex, camera;
+  float zoom_float;
+  double zoom;
 };
 
 dvec3 color(in vec2 pos)
 {
   dvec3 result = dvec3(0.0, 0.0, 0.0);
 
+  float w = resolution.x;
+  float h = resolution.y;
+
   dvec2 z;
-  z.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + posX * 0.5;
-  z.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + posY * 0.5;
+  z.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + camera.x * 0.5;
+  z.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + camera.y * 0.5;
 
   // uncomment to get Mandelbrot set
   //dvec2 c = z;
@@ -29,7 +34,7 @@ dvec3 color(in vec2 pos)
     z.x = z.x * z.x - z.y * z.y;
     z.y = 2.0 * tmp;
 
-    z += c;
+    z += complex;
   }
 
   if (i >= vis)
