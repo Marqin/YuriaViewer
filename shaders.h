@@ -7,4 +7,10 @@
 
 #include "includes.h"
 
+#include <stdbool.h>
+
 GLchar * getShader (const char * const path);
+
+bool isOK( GLuint, const char * const );
+
+bool compileShader( GLuint *, const char * const, GLenum );

@@ -34,3 +34,36 @@ GLchar * getShader (const char * const path)
 
 	return buffer;
 }
+
+bool isOK( GLuint shaderId, const char * const name )
+{
+	GLint isCompiled = 0;
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &isCompiled);
+	if(isCompiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		GLchar errorLog[maxLength];
+		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
+		printf( "%s: %s\n", name, errorLog );
+
+		return false;
+	}
+	return true;
+}
+
+bool compileShader( GLuint * shaderId, const char * const path, GLenum type )
+{
+	const GLchar * shader = getShader(path);
+
+	*shaderId = glCreateShader(type);
+	glShaderSource(*shaderId, 1, &shader, NULL);
+	glCompileShader(*shaderId);
+	if( ! isOK(*shaderId, path) )
+	{
+		glDeleteShader(*shaderId);
+		return false;
+	}
+	return true;
+}

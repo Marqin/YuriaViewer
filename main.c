@@ -42,39 +42,19 @@ void load(void)
          fragment32ShaderId, fragment64ShaderId;
 
 	// Vertex Array Obj
-
 	glGenVertexArrays(1, &vaoId);
 	glBindVertexArray(vaoId);
 
-	// Shaders
-  const GLchar * fs_32 = getShader("fragment_32.glsl");
-  const GLchar * fs_64 = getShader("fragment_64.glsl");
-  const GLchar * vs = getShader("vertex.glsl");
-
-	vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vs, NULL);
-	glCompileShader(vertexShaderId);
-  if( ! isOK(vertexShaderId, "vertex shader") )
+  if( ! compileShader(&vertexShaderId, "vertex.glsl", GL_VERTEX_SHADER) )
   {
-    glDeleteShader(vertexShaderId);
     return;
   }
-
-	fragment32ShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment32ShaderId, 1, &fs_32, NULL);
-	glCompileShader(fragment32ShaderId);
-  if( ! isOK(fragment32ShaderId, "fragment_32 shader") )
+  if( ! compileShader(&fragment32ShaderId, "fragment_32.glsl", GL_FRAGMENT_SHADER) )
   {
-    glDeleteShader(fragment32ShaderId);
     return;
   }
-
-  fragment64ShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment64ShaderId, 1, &fs_64, NULL);
-  glCompileShader(fragment64ShaderId);
-  if( ! isOK(fragment64ShaderId, "fragment_64 shader") )
+  if( ! compileShader(&fragment64ShaderId, "fragment_64.glsl", GL_FRAGMENT_SHADER) )
   {
-    glDeleteShader(fragment64ShaderId);
     return;
   }
 
