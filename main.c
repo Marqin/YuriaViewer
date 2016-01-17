@@ -25,7 +25,7 @@ int init(GLFWwindow **window, uint32_t res[2])
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	*window = glfwCreateWindow(res[0], res[1], "YuriaView 0.3", NULL, NULL);
+	*window = glfwCreateWindow(res[0], res[1], "Yuria Viewer 0.4", NULL, NULL);
 
 	if (!(*window))
 	{
