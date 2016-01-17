@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct program_states {
 	int32_t maxi, vis;
@@ -15,4 +16,5 @@ typedef struct program_states {
 	double zoom_64;
 	GLuint prog_32, prog_64;
 	uint8_t precision;
+	bool support_64;
 } pstates;

@@ -147,6 +147,7 @@ int input(pstates *prog)
 	s += get_float("Real part of const: ", &prog->con[0]);
 	s += get_float("Imaginary part of const: ", &prog->con[1]);
 	s += get_int("Max iterations: ", &prog->maxi);
+  printf("\n\n");
 
 	return s;
 }
@@ -188,6 +189,25 @@ int main(void)
 	glewExperimental = GL_TRUE; // need for VAO
 	if(glewInit() != GLEW_OK)
 		exit(EXIT_FAILURE);
+
+  bool GL_double = false;
+  GLint n = 0;
+  glGetIntegerv(GL_NUM_EXTENSIONS, &n);
+  for (GLint i = 0; i < n; i++) {
+    const GLchar * ext = (GLchar *)glGetStringi(GL_EXTENSIONS, i);  // u -> sig!
+    if (strcmp(ext, "GL_ARB_gpu_shader_fp64") == 0) {
+      GL_double = true;
+      break;
+    }
+  }
+
+  if( ! GL_double ) {
+    prog.support_64 = false;
+    prog.precision = 32;
+    fprintf(stderr,
+            "ERROR: Your GPU does not support GL_ARB_gpu_shader_fp64!\n");
+    fprintf(stderr, "Falling back to 32-bit mode.\n\n");
+  }
 
   load(&window);
   mainloop(&window);

@@ -27,9 +27,12 @@ shaders:
 
 In case of problems, see below:
 
-## double-precision mode
 
-If your GPU supports `GL_ARB_gpu_shader_fp64`, you can press `p` to go into
-64-bit mode in which fractal can be zoomed much more than in 32-bit mode. Keep
-in mind, that some drivers have broken 64-bit support and you can see black
-screen. In that case just press `p` again to get back to 32-bit mode.
+
+## 32/64-bit shaders
+
+You can swap between 32/64-bit shaders pressing `p` key.
+
+64-bit mode is default, unless your GPU don't have `GL_ARB_gpu_shader_fp64`
+extension. If 64-bit mode it's too slow for you or you see black screen
+( possible on some broken driver ), then you should change to 32-bit shaders.
