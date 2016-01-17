@@ -43,6 +43,7 @@ void load(GLFWwindow **window)
     return; // need better error handling
 
 	GLuint vaoId, vertexShaderId, fragment32ShaderId, fragment64ShaderId;
+  unsigned int block_index;
 
 	// Vertex Array Obj
 	glGenVertexArrays(1, &vaoId);
@@ -56,31 +57,36 @@ void load(GLFWwindow **window)
   {
     return;
   }
-  if( ! compileShader(&fragment64ShaderId, "fragment_64.glsl", GL_FRAGMENT_SHADER) )
-  {
-    return;
-  }
 
-	prog->prog_32 = glCreateProgram();
-	glAttachShader(prog->prog_32, vertexShaderId);
+  prog->prog_32 = glCreateProgram();
+  glAttachShader(prog->prog_32, vertexShaderId);
   glAttachShader(prog->prog_32, fragment32ShaderId);
   glLinkProgram(prog->prog_32);
-
-  prog->prog_64 = glCreateProgram();
-  glAttachShader(prog->prog_64, vertexShaderId);
-  glAttachShader(prog->prog_64, fragment64ShaderId);
-  glLinkProgram(prog->prog_64);
-
-
-  unsigned int block_index;
-
-  glUseProgram(prog->prog_64);
-  block_index = glGetUniformBlockIndex(prog->prog_64, "ProgData");
-  glUniformBlockBinding(prog->prog_64, block_index, BINDING_POINT_INDEX);
 
   glUseProgram(prog->prog_32);
   block_index = glGetUniformBlockIndex(prog->prog_32, "ProgData");
   glUniformBlockBinding(prog->prog_32, block_index, BINDING_POINT_INDEX);
+
+  if( prog->support_64 ) {
+    if( ! compileShader(&fragment64ShaderId, "fragment_64.glsl", GL_FRAGMENT_SHADER) )
+    {
+      return;
+    }
+
+    prog->prog_64 = glCreateProgram();
+    glAttachShader(prog->prog_64, vertexShaderId);
+    glAttachShader(prog->prog_64, fragment64ShaderId);
+    glLinkProgram(prog->prog_64);
+
+
+    glUseProgram(prog->prog_64);
+    block_index = glGetUniformBlockIndex(prog->prog_64, "ProgData");
+    glUniformBlockBinding(prog->prog_64, block_index, BINDING_POINT_INDEX);
+
+    glUseProgram(prog->prog_64);
+  } else {
+    glUseProgram(prog->prog_32);
+  }
 }
 
 void render(GLFWwindow **window)
