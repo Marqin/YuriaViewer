@@ -36,10 +36,13 @@ int init(GLFWwindow **window, uint32_t res[2])
 	return 0;
 }
 
-void load(void)
+void load(GLFWwindow **window)
 {
-	GLuint programId, vaoId, vertexShaderId,
-         fragment32ShaderId, fragment64ShaderId;
+  pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
+  if(prog == NULL)
+    return; // need better error handling
+
+	GLuint vaoId, vertexShaderId, fragment32ShaderId, fragment64ShaderId;
 
 	// Vertex Array Obj
 	glGenVertexArrays(1, &vaoId);
@@ -58,21 +61,26 @@ void load(void)
     return;
   }
 
-	programId = glCreateProgram();
-	glAttachShader(programId, vertexShaderId);
+	prog->prog_32 = glCreateProgram();
+	glAttachShader(prog->prog_32, vertexShaderId);
+  glAttachShader(prog->prog_32, fragment32ShaderId);
+  glLinkProgram(prog->prog_32);
 
-  #ifdef single
-    glAttachShader(programId, fragment32ShaderId);
-  #else
-    glAttachShader(programId, fragment64ShaderId);
-  #endif
+  prog->prog_64 = glCreateProgram();
+  glAttachShader(prog->prog_64, vertexShaderId);
+  glAttachShader(prog->prog_64, fragment64ShaderId);
+  glLinkProgram(prog->prog_64);
 
 
-	glLinkProgram(programId);
-	glUseProgram(programId);
+  unsigned int block_index;
 
-	unsigned int block_index = glGetUniformBlockIndex(programId, "ProgData");
-	glUniformBlockBinding(programId, block_index, BINDING_POINT_INDEX);
+  glUseProgram(prog->prog_64);
+  block_index = glGetUniformBlockIndex(prog->prog_64, "ProgData");
+  glUniformBlockBinding(prog->prog_64, block_index, BINDING_POINT_INDEX);
+
+  glUseProgram(prog->prog_32);
+  block_index = glGetUniformBlockIndex(prog->prog_32, "ProgData");
+  glUniformBlockBinding(prog->prog_32, block_index, BINDING_POINT_INDEX);
 }
 
 void render(GLFWwindow **window)
@@ -150,6 +158,7 @@ void help(void)
 	puts("z/x - zoom in/out");
 	puts("c/v - decrease/increase number of colors");
 	puts("d - print debug information");
+  puts("p - swap between 32 and 64 bit modes");
 	puts("h - this help\n");
 }
 
@@ -180,23 +189,8 @@ int main(void)
 	if(glewInit() != GLEW_OK)
 		exit(EXIT_FAILURE);
 
-	GLint n=0;
-	int GL_double=0;
-	glGetIntegerv(GL_NUM_EXTENSIONS, &n);
-	for (GLint i = 0; i < n; i++) {
-		const GLchar * ext = (GLchar *)glGetStringi(GL_EXTENSIONS, i);  // u -> sig!
-		if (strcmp(ext, "GL_ARB_gpu_shader_fp64") == 0) {
-			GL_double = 1;
-			break;
-		}
-	}
-
-	if(GL_double) {
-		load();
-		mainloop(&window);
-	} else {
-		fprintf(stderr, "ERROR: Your GPU does not support GL_ARB_gpu_shader_fp64!");
-	}
+  load(&window);
+  mainloop(&window);
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

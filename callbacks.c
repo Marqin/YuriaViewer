@@ -77,6 +77,32 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 		help();
 		break;
 
+	case GLFW_KEY_P:
+		if( prog->precision == 32 ) {
+			GLint n=0;
+			int GL_double=0;
+			glGetIntegerv(GL_NUM_EXTENSIONS, &n);
+			for (GLint i = 0; i < n; i++) {
+				const GLchar * ext = (GLchar *)glGetStringi(GL_EXTENSIONS, i);  // u -> sig!
+				if (strcmp(ext, "GL_ARB_gpu_shader_fp64") == 0) {
+					GL_double = 1;
+					break;
+				}
+			}
+
+			if(GL_double) {
+				prog->precision = 64;
+				glUseProgram(prog->prog_64);
+			} else {
+				fprintf(stderr, "ERROR: Your GPU does not support GL_ARB_gpu_shader_fp64!");
+			}
+		} else {
+			prog->precision = 32;
+			glUseProgram(prog->prog_32);
+		}
+		render(&window);
+		break;
+
 	default:
 		break;
 	}

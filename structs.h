@@ -13,4 +13,6 @@ typedef struct program_states {
 	float con[2], pos[2];
 	float zoom_32, offset;
 	double zoom_64;
+	GLuint prog_32, prog_64;
+	uint8_t precision;
 } pstates;

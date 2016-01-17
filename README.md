@@ -16,8 +16,6 @@ To list all avalible commands press 'h' while displaying a set.
 
 `make` - builds Yuria Viewer
 
-`make CFLAGS=-Dsingle` - builds Yuria Viewer in single-precision mode
-
 `make clean` - cleans build directory
 
 
@@ -29,11 +27,9 @@ shaders:
 
 In case of problems, see below:
 
-## single-precision mode
+## double-precision mode
 
-If your GPU doesn't have `GL_ARB_gpu_shader_fp64`, drivers have broken
-implementation of `double` type, or double-precision shaders are just too slow
-for your GPU, then you should fallback to single-precision mode.
-
-Keep in mind that you cannot zoom as much in this mode, as in double-precision
-mode.
+If your GPU supports `GL_ARB_gpu_shader_fp64`, you can press `p` to go into
+64-bit mode in which fractal can be zoomed much more than in 32-bit mode. Keep
+in mind, that some drivers have broken 64-bit support and you can see black
+screen. In that case just press `p` again to get back to 32-bit mode.

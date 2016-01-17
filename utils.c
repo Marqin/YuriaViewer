@@ -39,5 +39,7 @@ pstates init_pstates()
 	p.con[0] = 0.0;
 	p.con[1] = 0.0;
 
+	p.precision = 32;
+
 	return p;
 }
