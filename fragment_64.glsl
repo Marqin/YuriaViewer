@@ -16,12 +16,11 @@ dvec3 color(in vec2 pos)
 {
   dvec3 result = dvec3(0.0, 0.0, 0.0);
 
-  float w = resolution.x;
-  float h = resolution.y;
-
   dvec2 z;
-  z.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + camera.x * 0.5;
-  z.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + camera.y * 0.5;
+  z.x = 1.5 * 2.0 * pos.x/double(resolution.x) + camera.x - 1.5;
+  z.y = 2.0 * pos.y/double(resolution.y) + camera.y - 1.0;
+
+  z /= zoom;
 
   // uncomment to get Mandelbrot set
   //dvec2 c = z;

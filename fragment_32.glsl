@@ -10,36 +10,16 @@ layout (std140) uniform ProgData
   float zoom;
 };
 
-vec2 c_pow( in vec2 c, in float n )
-{
-  float r = length( c );
-  if( r == 0 )
-  {
-    return vec2(0,0);
-  }
-  float fi = atan( c.y/c.x );
-  r = pow(r, n);
-  fi *= n;
-  return vec2( r*cos(fi), r*sin(fi) );
-}
-
-vec2 c_exp( in vec2 c )
-{
-  float r = exp( c.y );
-  float fi = atan( c.y/c.x );
-  return vec2( r*cos(fi), r*sin(fi) );
-}
-
 vec3 color(in vec2 pos)
 {
   vec3 result = vec3(0.0, 0.0, 0.0);
 
-  float w = resolution.x;
-  float h = resolution.y;
-
   vec2 z;
-  z.x = 1.5 * (pos.x - w / 2.0) / (0.5 * zoom * w) + camera.x * 0.5;
-  z.y = (pos.y - h / 2.0) / (0.5 * zoom * h) + camera.y * 0.5;
+
+  z.x = 1.5 * 2.0 * pos.x/float(resolution.x) + camera.x - 1.5;
+  z.y = 2.0 * pos.y/float(resolution.y) + camera.y - 1.0;
+
+  z /= zoom;
 
   // uncomment to get Mandelbrot set
   //vec2 c = z;
@@ -48,9 +28,11 @@ vec3 color(in vec2 pos)
   int i;
   for(i = 0; i < maxi && length(z) <= 2.0; i++)
   {
-    z = c_pow(z, 2) + complex;
-    //z = c_pow(z, 7) + vec2(0.626, 0.0);    // experiments
-    //z = c_exp(c_pow(z,2)) - vec2(0.65, 0); // experiments
+    float tmp = z.x * z.y;
+    z.x = z.x * z.x - z.y * z.y;
+    z.y = 2.0 * tmp;
+
+    z += complex;
   }
 
   if (i >= vis)
