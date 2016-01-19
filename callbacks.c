@@ -14,6 +14,34 @@ extern void error_callback(int error, const char *description)
 	printf("%d: %s\n", error, description);
 }
 
+void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset )
+{
+  pstates *prog = (pstates *) glfwGetWindowUserPointer(window);
+  if(prog == NULL)
+    return;
+
+
+  if( fabs(yoffset) <= 0.25 )
+    return;
+
+  bool neg = false;
+
+  if( yoffset < 0.0 )
+  { // zoom out
+    yoffset *= -1.0;
+    neg = true;
+  }
+
+  yoffset = yoffset > 5.0 ? 5.0 : yoffset;
+  yoffset = yoffset < 1.0 ? 1.0 : yoffset;
+  yoffset = (yoffset - 1.0)/4.0 + 1.0;
+  yoffset = neg ? 1.0/yoffset : yoffset;
+
+  prog->zoom_64 *= yoffset;
+	prog->zoom_32 = prog->zoom_64;
+	render(&window);
+}
+
 extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
                          int action, int mods _UNUSED_)
 {
@@ -98,7 +126,6 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 		break;
 	}
 }
-
 
 
 extern void resize_callback(GLFWwindow *window, int32_t width, int32_t height)

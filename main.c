@@ -12,6 +12,8 @@ extern void key_callback(GLFWwindow *window, int key, int scancode, int action,
                          int mods);
 extern void resize_callback(GLFWwindow *window, int width, int height);
 extern void iconify_callback(GLFWwindow *window, int iconified);
+extern void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset );
+
 
 #define BINDING_POINT_INDEX 2
 
@@ -162,7 +164,7 @@ void help(void)
 {
 	puts("\nUSAGE:");
 	puts("arrow keys - move");
-	puts("z/x - zoom in/out");
+	puts("z/x or scroll - zoom in/out");
 	puts("c/v - decrease/increase number of colors");
 	puts("d - print debug information");
   puts("p - swap between 32 and 64 bit modes");
@@ -188,6 +190,7 @@ int main(void)
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetWindowSizeCallback(window, resize_callback);
 	glfwSetWindowIconifyCallback(window, iconify_callback);
+  glfwSetScrollCallback(window, scroll_callback);
 
 	glfwSetWindowUserPointer(window, &prog);
 	glfwMakeContextCurrent(window);
