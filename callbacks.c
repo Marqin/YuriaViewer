@@ -39,22 +39,22 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 		break;
 
 	case GLFW_KEY_LEFT:
-		prog->pos[0] -= 0.5;///prog->zoom_64;
+		prog->pos[0] -= 0.5;
 		render(&window);
 		break;
 
 	case GLFW_KEY_RIGHT:
-		prog->pos[0] += 0.5;///prog->zoom_64;
+		prog->pos[0] += 0.5;
 		render(&window);
 		break;
 
 	case GLFW_KEY_DOWN:
-		prog->pos[1] -= 0.5;///prog->zoom_64;
+		prog->pos[1] -= 0.5;
 		render(&window);
 		break;
 
 	case GLFW_KEY_UP:
-		prog->pos[1] += 0.5;///prog->zoom_64;
+		prog->pos[1] += 0.5;
 		render(&window);
 		break;
 
@@ -71,7 +71,8 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 	case GLFW_KEY_D:
 		printf("z:%lf x:%lf y:%lf v:%d\n",
 		       prog->zoom_64, prog->pos[0], prog->pos[1], prog->vis);
-		break;
+    fflush(stdout);
+    break;
 
 	case GLFW_KEY_H:
 		help();
@@ -80,7 +81,8 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 	case GLFW_KEY_P:
 		if( ! prog->support_64 ) {
 			fprintf(stderr, "Your GPU does not support GL_ARB_gpu_shader_fp64!\n");
-			break;
+      fflush(stdout);
+      break;
 		}
 		if( prog->precision == 32 ) {
 			prog->precision = 64;

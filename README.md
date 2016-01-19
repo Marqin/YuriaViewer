@@ -9,6 +9,7 @@ Prerequisites (probably not all):
   * GLFW 3
   * GLEW, GLU
   * pkg-config
+  * MSYS2 for Windows
 
 To list all avalible commands press 'h' while displaying a set.
 
@@ -36,3 +37,21 @@ You can swap between 32/64-bit shaders pressing `p` key.
 64-bit mode is default, unless your GPU don't have `GL_ARB_gpu_shader_fp64`
 extension. If 64-bit mode it's too slow for you or you see black screen
 ( possible on some broken driver ), then you should change to 32-bit shaders.
+
+
+## Building on Windows
+
+### Prerequisites
+You will need [MSYS2](https://msys2.github.io/).
+
+### Update MSYS2
+`update core`, restart MSYS2, then `pacman -Syu`
+
+### Install dependencies
+
+    pacman -Sy
+    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-pkg-config make git
+    PATH+=:/mingw64/bin:
+### Build
+
+The same as described in **Compilation** section.
