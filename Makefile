@@ -17,6 +17,7 @@ Dist = ./bin
 $(Dist)/YuriaViewer: Makefile $(Source) $(Headers)
 	mkdir -p "$(Dist)"
 	$(CC) $(CFLAGS) $(Source) $(LibsHeaders) $(Libs) -o $(Dist)/YuriaViewer
+	cp *\.glsl "$(Dist)"
 
 clean:
 	if [ -d "$(Dist)" ]; then rm -r -- "$(Dist)"; fi
