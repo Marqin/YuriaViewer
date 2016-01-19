@@ -15,6 +15,8 @@ To list all avalible commands press 'h' while displaying a set.
 
 ## Compilation
 
+For Windows see [below](#building-on-windows).
+
 `make` - builds Yuria Viewer
 
 `make clean` - cleans build directory
@@ -55,3 +57,4 @@ You will need [MSYS2](https://msys2.github.io/).
 ### Build
 
 The same as described in **Compilation** section.
+But if you want to use it on system that does not have MSYS2/glfw/glew then you need to compile it with `make CFLAGS=-static`.
