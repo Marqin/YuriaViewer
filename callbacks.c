@@ -39,22 +39,22 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 		break;
 
 	case GLFW_KEY_LEFT:
-		prog->pos[0] -= 0.5;
+		prog->pos[0] -= 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_RIGHT:
-		prog->pos[0] += 0.5;
+		prog->pos[0] += 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_DOWN:
-		prog->pos[1] -= 0.5;
+		prog->pos[1] -= 1.0/prog->zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_UP:
-		prog->pos[1] += 0.5;
+		prog->pos[1] += 1.0/prog->zoom_64;
 		render(&window);
 		break;
 

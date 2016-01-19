@@ -16,10 +16,10 @@ vec3 color(in vec2 pos)
 
   vec2 z;
 
-  z.x = 1.5 * 2.0 * pos.x/float(resolution.x) + camera.x - 1.5;
-  z.y = 2.0 * pos.y/float(resolution.y) + camera.y - 1.0;
-
+  z.x = 1.5 * pos.x/float(resolution.x/2) - 1.5;
+  z.y = pos.y/float(resolution.y/2) - 1.0;
   z /= zoom;
+  z += camera;
 
   // uncomment to get Mandelbrot set
   //vec2 c = z;
