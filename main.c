@@ -152,9 +152,9 @@ int input(pstates *prog)
 {
 	int s = 0;
 
-	s += get_float("Real part of const: ", &prog->con[0]);
-	s += get_float("Imaginary part of const: ", &prog->con[1]);
-	s += get_int("Max iterations: ", &prog->maxi);
+	s += get_float("Real part of const: ", &prog->uniform.con[0]);
+	s += get_float("Imaginary part of const: ", &prog->uniform.con[1]);
+	s += get_int("Max iterations: ", &prog->uniform.maxi);
   printf("\n\n");
 
 	return s;
@@ -184,7 +184,7 @@ int main(void)
 	GLFWwindow *window = NULL;
 	glfwSetErrorCallback(error_callback);
 
-	if(init(&window, prog.res))
+	if(init(&window, prog.uniform.res))
 		exit(EXIT_FAILURE);
 
 	glfwSetKeyCallback(window, key_callback);

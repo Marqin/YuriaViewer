@@ -9,7 +9,7 @@ Prerequisites (probably not all):
   * GLFW 3
   * GLEW, GLU
   * pkg-config
-  * MSYS2 for Windows
+  * MSYS2 for Windows build
 
 To list all avalible commands press 'h' while displaying a set.
 

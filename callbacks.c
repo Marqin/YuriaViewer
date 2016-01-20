@@ -37,8 +37,8 @@ void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset
   yoffset = (yoffset - 1.0)/4.0 + 1.0;
   yoffset = neg ? 1.0/yoffset : yoffset;
 
-  prog->zoom_64 *= yoffset;
-	prog->zoom_32 = prog->zoom_64;
+  prog->uniform.zoom_64 *= yoffset;
+	prog->uniform.zoom_32 = prog->uniform.zoom_64;
 	render(&window);
 }
 
@@ -55,50 +55,50 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 	if(action == GLFW_PRESS) switch(key)
 	{
 	case GLFW_KEY_Z:
-		prog->zoom_64 *= 2.0;
-		prog->zoom_32 = prog->zoom_64;
+		prog->uniform.zoom_64 *= 2.0;
+		prog->uniform.zoom_32 = prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_X:
-		prog->zoom_64 /= 2.0;
-		prog->zoom_32 = prog->zoom_64;
+		prog->uniform.zoom_64 /= 2.0;
+		prog->uniform.zoom_32 = prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_LEFT:
-		prog->pos[0] -= 1.0/prog->zoom_64;
+		prog->uniform.pos[0] -= 1.0/prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_RIGHT:
-		prog->pos[0] += 1.0/prog->zoom_64;
+		prog->uniform.pos[0] += 1.0/prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_DOWN:
-		prog->pos[1] -= 1.0/prog->zoom_64;
+		prog->uniform.pos[1] -= 1.0/prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_UP:
-		prog->pos[1] += 1.0/prog->zoom_64;
+		prog->uniform.pos[1] += 1.0/prog->uniform.zoom_64;
 		render(&window);
 		break;
 
 	case GLFW_KEY_C:
-		prog->vis += 10;
+		prog->uniform.vis += 10;
 		render(&window);
 		break;
 
 	case GLFW_KEY_V:
-		prog->vis -= 10;
+		prog->uniform.vis -= 10;
 		render(&window);
 		break;
 
 	case GLFW_KEY_D:
 		printf("z:%lf x:%lf y:%lf v:%d\n",
-		       prog->zoom_64, prog->pos[0], prog->pos[1], prog->vis);
+		       prog->uniform.zoom_64, prog->uniform.pos[0], prog->uniform.pos[1], prog->uniform.vis);
     fflush(stdout);
     break;
 
@@ -134,8 +134,8 @@ extern void resize_callback(GLFWwindow *window, int32_t width, int32_t height)
 	if(prog == NULL)
 		return;
 
-	prog->res[0] = width;
-	prog->res[1] = height;
+	prog->uniform.res[0] = width;
+	prog->uniform.res[1] = height;
 	glViewport(0, 0, (GLint)width, (GLint)height);
 	render(&window);
 }

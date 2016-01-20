@@ -8,12 +8,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct program_states {
+typedef struct uniform_struct {
 	int32_t maxi, vis;
 	uint32_t res[2];
 	float con[2], pos[2];
 	float zoom_32, offset;
 	double zoom_64;
+} uniform_struct_t;
+
+
+typedef struct program_states {
+	uniform_struct_t uniform;
 	GLuint prog_32, prog_64;
 	uint8_t precision;
 	bool support_64;
