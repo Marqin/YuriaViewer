@@ -20,8 +20,6 @@ void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset
   if(prog == NULL)
     return;
 
-	printf("scrolling offset: %lf\n", yoffset);
-
   if( fabs(yoffset) <= 0.25 )
     return;
 
@@ -35,7 +33,7 @@ void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset
 
   yoffset = yoffset > 1.0 ? 1.0 : yoffset;
   yoffset = yoffset < 0.25 ? 0.25 : yoffset;
-  yoffset = (yoffset - 0.25)/0.75 + 0.25;
+  yoffset = (yoffset - 0.25)/0.75 + 1.0;
   yoffset = neg ? 1.0/yoffset : yoffset;
 
   prog->uniform.zoom_64 *= yoffset;
