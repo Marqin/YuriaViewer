@@ -19,23 +19,23 @@ extern void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double 
 
 int init(GLFWwindow **window, uint32_t res[2])
 {
-	if (!glfwInit())
-		return 1;
+  if (!glfwInit())
+    return 1;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	*window = glfwCreateWindow(res[0], res[1], "Yuria Viewer 0.4", NULL, NULL);
+  *window = glfwCreateWindow(res[0], res[1], "Yuria Viewer 0.4", NULL, NULL);
 
-	if (!(*window))
-	{
-		glfwTerminate();
-		return 1;
-	}
+  if (!(*window))
+  {
+    glfwTerminate();
+    return 1;
+  }
 
-	return 0;
+  return 0;
 }
 
 void load(GLFWwindow **window)
@@ -44,12 +44,12 @@ void load(GLFWwindow **window)
   if(prog == NULL)
     return; // need better error handling
 
-	GLuint vaoId, vertexShaderId, fragment32ShaderId, fragment64ShaderId;
+  GLuint vaoId, vertexShaderId, fragment32ShaderId, fragment64ShaderId;
   unsigned int block_index;
 
-	// Vertex Array Obj
-	glGenVertexArrays(1, &vaoId);
-	glBindVertexArray(vaoId);
+  // Vertex Array Obj
+  glGenVertexArrays(1, &vaoId);
+  glBindVertexArray(vaoId);
 
   if( ! compileShader(&vertexShaderId, "vertex.glsl", GL_VERTEX_SHADER) )
   {
@@ -93,13 +93,13 @@ void load(GLFWwindow **window)
 
 void render(GLFWwindow **window)
 {
-	pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
-	if(prog == NULL)
-		return; // need better error handling
+  pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
+  if(prog == NULL)
+    return; // need better error handling
 
-	GLuint vboId, uniformBufferId;
+  GLuint vboId, uniformBufferId;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   GLfloat Vertices[12] = {
       -1.0, -1.0,
@@ -111,93 +111,93 @@ void render(GLFWwindow **window)
   };
 
 
-	// Vertex Buffer Objects
-	glGenBuffers(1, &vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, 12*sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+  // Vertex Buffer Objects
+  glGenBuffers(1, &vboId);
+  glBindBuffer(GL_ARRAY_BUFFER, vboId);
+  glBufferData(GL_ARRAY_BUFFER, 12*sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// Uniform Buffer Objects
-	glGenBuffers(1, &uniformBufferId);
-	glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(*prog), prog, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
+  // Uniform Buffer Objects
+  glGenBuffers(1, &uniformBufferId);
+  glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(*prog), prog, GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+  glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
 
 
 
-	// Draw
-	glDrawArrays(GL_TRIANGLES, 0, 6);//prog->h * prog->w);
-	glfwSwapBuffers(*window);
+  // Draw
+  glDrawArrays(GL_TRIANGLES, 0, 6);//prog->h * prog->w);
+  glfwSwapBuffers(*window);
 
-	// Free memory
-	glDeleteBuffers(1, &vboId);
-	glDeleteBuffers(1, &uniformBufferId);
+  // Free memory
+  glDeleteBuffers(1, &vboId);
+  glDeleteBuffers(1, &uniformBufferId);
 }
 
 void mainloop(GLFWwindow **window)
 {
-	render(window);
+  render(window);
 
-	while (!glfwWindowShouldClose(*window))
-	{
-		glfwWaitEvents();
-		glfwPollEvents();
-	}
+  while (!glfwWindowShouldClose(*window))
+  {
+    glfwWaitEvents();
+    glfwPollEvents();
+  }
 }
 
 int input(pstates *prog)
 {
-	int s = 0;
+  int s = 0;
 
-	s += get_float("Real part of const: ", &prog->uniform.con[0]);
-	s += get_float("Imaginary part of const: ", &prog->uniform.con[1]);
-	s += get_int("Max iterations: ", &prog->uniform.maxi);
+  s += get_float("Real part of const: ", &prog->uniform.con[0]);
+  s += get_float("Imaginary part of const: ", &prog->uniform.con[1]);
+  s += get_int("Max iterations: ", &prog->uniform.maxi);
   printf("\n\n");
 
-	return s;
+  return s;
 }
 
 void help(void)
 {
-	puts("\nUSAGE:");
-	puts("arrow keys - move");
-	puts("z/x or scroll - zoom in/out");
-	puts("c/v - decrease/increase number of colors");
-	puts("d - print debug information");
+  puts("\nUSAGE:");
+  puts("arrow keys - move");
+  puts("z/x or scroll - zoom in/out");
+  puts("c/v - decrease/increase number of colors");
+  puts("d - print debug information");
   puts("p - swap between 32 and 64 bit modes");
-	puts("h - this help\n");
+  puts("h - this help\n");
 }
 
 int main(void)
 {
-	pstates prog = init_pstates();
+  pstates prog = init_pstates();
 
-	if(input(&prog) != 3)
-	{
-		puts("Erroneous input.");
-		return 1;
-	}
+  if(input(&prog) != 3)
+  {
+    puts("Erroneous input.");
+    return 1;
+  }
 
-	GLFWwindow *window = NULL;
-	glfwSetErrorCallback(error_callback);
+  GLFWwindow *window = NULL;
+  glfwSetErrorCallback(error_callback);
 
-	if(init(&window, prog.uniform.res))
-		exit(EXIT_FAILURE);
+  if(init(&window, prog.uniform.res))
+    exit(EXIT_FAILURE);
 
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetWindowSizeCallback(window, resize_callback);
-	glfwSetWindowIconifyCallback(window, iconify_callback);
+  glfwSetKeyCallback(window, key_callback);
+  glfwSetWindowSizeCallback(window, resize_callback);
+  glfwSetWindowIconifyCallback(window, iconify_callback);
   glfwSetScrollCallback(window, scroll_callback);
 
-	glfwSetWindowUserPointer(window, &prog);
-	glfwMakeContextCurrent(window);
+  glfwSetWindowUserPointer(window, &prog);
+  glfwMakeContextCurrent(window);
 
-	glewExperimental = GL_TRUE; // need for VAO
-	if(glewInit() != GLEW_OK)
-		exit(EXIT_FAILURE);
+  glewExperimental = GL_TRUE; // need for VAO
+  if(glewInit() != GLEW_OK)
+    exit(EXIT_FAILURE);
 
   bool GL_double = false;
   GLint n = 0;
@@ -221,8 +221,8 @@ int main(void)
   load(&window);
   mainloop(&window);
 
-	glfwDestroyWindow(window);
-	glfwTerminate();
+  glfwDestroyWindow(window);
+  glfwTerminate();
 
-	exit(EXIT_SUCCESS);
+  exit(EXIT_SUCCESS);
 }
