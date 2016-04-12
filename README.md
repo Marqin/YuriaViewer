@@ -4,6 +4,8 @@
 
 Yuria Viewer is simple (yet) Julia set explorer written in C99.
 
+[click here for animated WebGL version](https://www.shadertoy.com/view/ldcSRX)
+
 Prerequisites (probably not all):
   * OpenGL 4.1 (higher should work)
   * GLFW 3
