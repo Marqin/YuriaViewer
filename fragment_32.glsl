@@ -28,11 +28,7 @@ vec3 color(in vec2 pos)
   int i;
   for(i = 0; i < maxi && length(z) <= 2.0; i++)
   {
-    float tmp = z.x * z.y;
-    z.x = z.x * z.x - z.y * z.y;
-    z.y = 2.0 * tmp;
-
-    z += complex;
+    z = mat2(z,-z.y,z.x)*z + complex;
   }
 
   if (i >= vis)
