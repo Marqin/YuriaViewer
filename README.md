@@ -49,13 +49,13 @@ extension. If 64-bit mode it's too slow for you or you see black screen
 You will need [MSYS2](https://msys2.github.io/).
 
 ### Update MSYS2
-`update core`, restart MSYS2, then `pacman -Syu`
+`pacman -Sy pacman`, restart MSYS2, then `pacman -Syu` and restart again
 
 ### Install dependencies
 
-    pacman -Sy
-    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-pkg-config make git
-    PATH+=:/mingw64/bin:
+    pacman -Rs gcc pkg-config  # this removes MSYS2 default gcc & pkg-config
+    pacman -Sy mingw-w64-$(uname -m)-gcc mingw-w64-$(uname -m)-glew mingw-w64-$(uname -m)-glfw mingw-w64-$(uname -m)-pkg-config make git
+    echo 'export PATH+=":/mingw64/bin:/mingw32/bin:"' >> "$HOME/.bashrc"
 ### Build
 
 The same as described in **Compilation** section.
