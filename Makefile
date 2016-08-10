@@ -10,9 +10,14 @@ Source = callbacks.c main.c utils.c shaders.c
 Headers = includes.h shaders.h structs.h utils.h
 LibsHeaders = $(shell pkg-config --cflags glfw3) $(shell pkg-config --cflags glew)
 Libs = $(shell pkg-config --libs glfw3) $(shell pkg-config --libs glew)
-OS_NAME = $(shell uname -s)
-ifeq ($(OS_NAME), Darwin)
-	Libs += -framework OpenGL -framework Cocoa -framework IOKit
+
+ifeq ($(OS),Windows_NT)
+	Libs += -lopengl32
+else
+	OS_NAME = $(shell uname -s)
+	ifeq ($(OS_NAME), Darwin)
+		Libs += -framework OpenGL -framework Cocoa -framework IOKit
+	endif
 endif
 
 Dist = ./bin
