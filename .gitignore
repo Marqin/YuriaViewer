@@ -2,3 +2,4 @@ bin/
 .waf-*
 .waf3-*
 .lock-waf*
+waf3-*

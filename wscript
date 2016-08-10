@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import sys
-APPNAME="YuriaViewer"
 top = "."
 out = "bin"
 
 C_SOURCES = ["main.c", "shaders.c", "utils.c", "callbacks.c"]
 
 from waflib.Tools.compiler_c import c_compiler
+c_compiler["win32"] = ["gcc"]
 
 def options(opt):
     opt.load("compiler_c")
