@@ -4,12 +4,17 @@
 #
 
 CC = gcc
-Warnings = -pedantic -Wall -Wextra -Wshadow -Wstrict-overflow
-override CFLAGS += $(Warnings) -Werror -std=c99 -Os -O2 -fno-strict-aliasing
+Warnings = -pedantic -Wall -Wextra -Wshadow -Wstrict-overflow=5
+override CFLAGS += $(Warnings) -Werror -std=c99 -O2 -fstrict-aliasing
 Source = callbacks.c main.c utils.c shaders.c
 Headers = includes.h shaders.h structs.h utils.h
-LibsHeaders = $(shell pkg-config --static --cflags glew) $(shell pkg-config --static --cflags glfw3)
-Libs = $(shell pkg-config --static --libs glew) $(shell pkg-config --static --libs glfw3) -lm
+LibsHeaders = $(shell pkg-config --cflags glfw3) $(shell pkg-config --cflags glew)
+Libs = $(shell pkg-config --libs glfw3) $(shell pkg-config --libs glew)
+OS_NAME = $(shell uname -s)
+ifeq ($(OS_NAME), Darwin)
+	Libs += -framework OpenGL -framework Cocoa -framework IOKit
+endif
+
 Dist = ./bin
 
 .PHONY: all clean
