@@ -26,21 +26,20 @@ pstates init_pstates()
 {
   pstates p;
 
-  p.uniform.zoom_32 = 1.0;
-  p.uniform.zoom_64 = 1.0;
-  p.uniform.pos[0] = 0l;
-  p.uniform.pos[1] = 0l;
+  p.uniformStruct.zoom_32 = 1.0;
+  p.uniformStruct.zoom_64 = 1.0;
+  p.uniformStruct.pos[0] = 0l;
+  p.uniformStruct.pos[1] = 0l;
 
-  p.uniform.res[0] = 800;
-  p.uniform.res[1] = 600;
-  p.uniform.maxi = 0;
-  p.uniform.vis = 50;
+  p.uniformStruct.res[0] = 800;
+  p.uniformStruct.res[1] = 600;
+  p.uniformStruct.maxi = 0;
+  p.uniformStruct.vis = 50;
 
-  p.uniform.con[0] = 0.0;
-  p.uniform.con[1] = 0.0;
+  p.uniformStruct.con[0] = 0.0;
+  p.uniformStruct.con[1] = 0.0;
 
-  p.precision = 64;
-  p.support_64 = true;
+  p.GPUHas64BitSupport = true;
 
   return p;
 }

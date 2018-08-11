@@ -2,7 +2,7 @@ find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(GLEW 2 REQUIRED)
 
-add_executable(YuriaViewer main.c callbacks.c utils.c shaders.c)
+add_executable(YuriaViewer main.c callbacks.c utils.c shaders.c program.c program.h)
 
 target_link_libraries(YuriaViewer
         OpenGL::GL

@@ -5,12 +5,8 @@
 
 #pragma once
 
-#include "includes.h"
+#include "structs.h"
 
-#include <stdbool.h>
+bool loadProgram(pstates*, GLuint*, GLuint, GLuint);
 
-GLchar * getShader (const char * const path);
-
-bool isOK( GLuint, const char * const );
-
-GLuint createShader(const char * const, GLenum);
+void updateProgram(pstates*);

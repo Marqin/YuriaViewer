@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <GL/glew.h>
 
-typedef struct uniform_struct {
+typedef struct uniform_struct_s {
   int32_t maxi, vis;
   uint32_t res[2];
   float con[2];
@@ -20,8 +20,7 @@ typedef struct uniform_struct {
 
 
 typedef struct program_states {
-  uniform_struct_t uniform;
-  GLuint prog_32, prog_64;
-  uint8_t precision;
-  bool support_64;
+  uniform_struct_t uniformStruct;
+  GLuint program32bit, program64bit, currentProgram;
+  bool GPUHas64BitSupport;
 } pstates;

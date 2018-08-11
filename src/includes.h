@@ -20,3 +20,5 @@
 #include <stdint.h>
 
 #define _UNUSED_ __attribute__ ((unused))
+
+#define BINDING_POINT_INDEX 2

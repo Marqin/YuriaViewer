@@ -6,6 +6,7 @@
 
 #include "includes.h"
 #include "shaders.h"
+#include "program.h"
 
 extern void error_callback(int error, const char *description);
 extern void key_callback(GLFWwindow *window, int key, int scancode, int action,
@@ -13,9 +14,6 @@ extern void key_callback(GLFWwindow *window, int key, int scancode, int action,
 extern void resize_callback(GLFWwindow *window, int width, int height);
 extern void iconify_callback(GLFWwindow *window, int iconified);
 extern void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset );
-
-
-#define BINDING_POINT_INDEX 2
 
 int init(GLFWwindow **window, uint32_t res[2])
 {
@@ -38,57 +36,37 @@ int init(GLFWwindow **window, uint32_t res[2])
   return 0;
 }
 
+void createVertexArrayObject()
+{
+  GLuint vaoId;
+  glGenVertexArrays(1, &vaoId);
+  glBindVertexArray(vaoId);
+}
+
 void load(GLFWwindow **window)
 {
   pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
   if(prog == NULL)
     return; // need better error handling
 
-  GLuint vaoId, vertexShaderId, fragment32ShaderId, fragment64ShaderId;
-  unsigned int block_index;
+  createVertexArrayObject();
 
-  // Vertex Array Obj
-  glGenVertexArrays(1, &vaoId);
-  glBindVertexArray(vaoId);
+  GLuint vertexShaderId = createShader("vertex.glsl", GL_VERTEX_SHADER);
 
-  if( ! compileShader(&vertexShaderId, "vertex.glsl", GL_VERTEX_SHADER) )
-  {
-    return;
-  }
-  if( ! compileShader(&fragment32ShaderId, "fragment_32.glsl", GL_FRAGMENT_SHADER) )
+  if(! loadProgram(prog, &prog->program32bit, vertexShaderId, createShader("fragment_32.glsl", GL_FRAGMENT_SHADER)))
   {
     return;
   }
 
-  prog->prog_32 = glCreateProgram();
-  glAttachShader(prog->prog_32, vertexShaderId);
-  glAttachShader(prog->prog_32, fragment32ShaderId);
-  glLinkProgram(prog->prog_32);
-
-  glUseProgram(prog->prog_32);
-  block_index = glGetUniformBlockIndex(prog->prog_32, "ProgData");
-  glUniformBlockBinding(prog->prog_32, block_index, BINDING_POINT_INDEX);
-
-  if( prog->support_64 ) {
-    if( ! compileShader(&fragment64ShaderId, "fragment_64.glsl", GL_FRAGMENT_SHADER) )
+  if( prog->GPUHas64BitSupport )
+  {
+    if(! loadProgram(prog, &prog->program64bit, vertexShaderId, createShader("fragment_64.glsl", GL_FRAGMENT_SHADER)))
     {
       return;
     }
-
-    prog->prog_64 = glCreateProgram();
-    glAttachShader(prog->prog_64, vertexShaderId);
-    glAttachShader(prog->prog_64, fragment64ShaderId);
-    glLinkProgram(prog->prog_64);
-
-
-    glUseProgram(prog->prog_64);
-    block_index = glGetUniformBlockIndex(prog->prog_64, "ProgData");
-    glUniformBlockBinding(prog->prog_64, block_index, BINDING_POINT_INDEX);
-
-    glUseProgram(prog->prog_64);
-  } else {
-    glUseProgram(prog->prog_32);
   }
+
+  updateProgram(prog);
 }
 
 void render(GLFWwindow **window)
@@ -122,7 +100,7 @@ void render(GLFWwindow **window)
   // Uniform Buffer Objects
   glGenBuffers(1, &uniformBufferId);
   glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(prog->uniform), &prog->uniform, GL_DYNAMIC_DRAW);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(prog->uniformStruct), &prog->uniformStruct, GL_DYNAMIC_DRAW);
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
 
@@ -148,13 +126,13 @@ void mainloop(GLFWwindow **window)
   }
 }
 
-int input(pstates *prog)
+int getInputParameters(uniform_struct_t* uniformStruct)
 {
   int s = 0;
 
-  s += get_float("Real part of const: ", &prog->uniform.con[0]);
-  s += get_float("Imaginary part of const: ", &prog->uniform.con[1]);
-  s += get_int("Max iterations: ", &prog->uniform.maxi);
+  s += get_float("Real part of const: ", &uniformStruct->con[0]);
+  s += get_float("Imaginary part of const: ", &uniformStruct->con[1]);
+  s += get_int("Max iterations: ", &uniformStruct->maxi);
   printf("\n\n");
 
   return s;
@@ -175,16 +153,16 @@ int main(void)
 {
   pstates prog = init_pstates();
 
-  if(input(&prog) != 3)
+  if(getInputParameters(&prog.uniformStruct) != 3)
   {
-    puts("Erroneous input.");
+    puts("Erroneous getInputParameters.");
     return 1;
   }
 
   GLFWwindow *window = NULL;
   glfwSetErrorCallback(error_callback);
 
-  if(init(&window, prog.uniform.res))
+  if(init(&window, prog.uniformStruct.res))
     exit(EXIT_FAILURE);
 
   glfwSetKeyCallback(window, key_callback);
@@ -211,8 +189,7 @@ int main(void)
   }
 
   if( ! GL_double ) {
-    prog.support_64 = false;
-    prog.precision = 32;
+    prog.GPUHas64BitSupport = false;
     fprintf(stderr,
             "ERROR: Your GPU does not support GL_ARB_gpu_shader_fp64!\n");
     fprintf(stderr, "Falling back to 32-bit mode.\n\n");

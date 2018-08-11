@@ -53,17 +53,17 @@ bool isOK( GLuint shaderId, const char * const name )
   return true;
 }
 
-bool compileShader( GLuint * shaderId, const char * const path, GLenum type )
+GLuint createShader(const char * const path, GLenum type)
 {
-  const GLchar * shader = getShader(path);
+  GLuint shaderId = glCreateShader(type);
 
-  *shaderId = glCreateShader(type);
-  glShaderSource(*shaderId, 1, &shader, NULL);
-  glCompileShader(*shaderId);
-  if( ! isOK(*shaderId, path) )
+  const GLchar * shader = getShader(path);
+  glShaderSource(shaderId, 1, &shader, NULL);
+  glCompileShader(shaderId);
+  if( ! isOK(shaderId, path) )
   {
-    glDeleteShader(*shaderId);
-    return false;
+    glDeleteShader(shaderId);
+    return 0;
   }
-  return true;
+  return shaderId;
 }
