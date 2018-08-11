@@ -15,7 +15,7 @@ void error_callback(int error, const char *description)
   printf("%d: %s\n", error, description);
 }
 
-void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset )
+void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset)
 {
   pstates *prog = (pstates *) glfwGetWindowUserPointer(window);
   if(prog == NULL)
@@ -42,8 +42,7 @@ void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset
   render(&window);
 }
 
-void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
-                         int action, int mods _UNUSED_)
+void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_, int action, int mods _UNUSED_)
 {
   if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     glfwSetWindowShouldClose(window, GL_TRUE);
@@ -52,83 +51,96 @@ void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
   if(prog == NULL)
     return;
 
-  if(action == GLFW_PRESS) switch(key)
-  {
-  case GLFW_KEY_Z:
-    prog->uniformStruct.zoom_64 *= 2.0;
-    prog->uniformStruct.zoom_32 = (float)prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+  if(action == GLFW_PRESS) {
+    switch (key) {
+      case GLFW_KEY_Z:
+      {
+        prog->uniformStruct.zoom_64 *= 2.0;
+        prog->uniformStruct.zoom_32 = (float) prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_X:
-    prog->uniformStruct.zoom_64 /= 2.0;
-    prog->uniformStruct.zoom_32 = (float)prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+      case GLFW_KEY_X:
+      {
+        prog->uniformStruct.zoom_64 /= 2.0;
+        prog->uniformStruct.zoom_32 = (float) prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_LEFT:
-    prog->uniformStruct.pos[0] -= 1.0/prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+      case GLFW_KEY_LEFT:
+      {
+        prog->uniformStruct.pos[0] -= 1.0 / prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_RIGHT:
-    prog->uniformStruct.pos[0] += 1.0/prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+      case GLFW_KEY_RIGHT:
+      {
+        prog->uniformStruct.pos[0] += 1.0 / prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_DOWN:
-    prog->uniformStruct.pos[1] -= 1.0/prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+      case GLFW_KEY_DOWN:
+      {
+        prog->uniformStruct.pos[1] -= 1.0 / prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_UP:
-    prog->uniformStruct.pos[1] += 1.0/prog->uniformStruct.zoom_64;
-    render(&window);
-    break;
+      case GLFW_KEY_UP:
+      {
+        prog->uniformStruct.pos[1] += 1.0 / prog->uniformStruct.zoom_64;
+        break;
+      }
 
-  case GLFW_KEY_C:
-    prog->uniformStruct.vis += 10;
-    render(&window);
-    break;
+      case GLFW_KEY_C:
+      {
+        prog->uniformStruct.vis += 10;
+        break;
+      }
 
-  case GLFW_KEY_V:
-    prog->uniformStruct.vis -= 10;
-    render(&window);
-    break;
+      case GLFW_KEY_V:
+      {
+        prog->uniformStruct.vis -= 10;
+        break;
+      }
 
-  case GLFW_KEY_D:
-    printf("z:%lf x:%lf y:%lf v:%d\n",
-           prog->uniformStruct.zoom_64, prog->uniformStruct.pos[0], prog->uniformStruct.pos[1], prog->uniformStruct.vis);
-    fflush(stdout);
-    break;
+      case GLFW_KEY_D:
+      {
+        printf("z:%lf x:%lf y:%lf v:%d\n",
+               prog->uniformStruct.zoom_64, prog->uniformStruct.pos[0], prog->uniformStruct.pos[1],
+               prog->uniformStruct.vis);
+        fflush(stdout);
+        return;
+      }
 
-  case GLFW_KEY_H:
-    help();
-    break;
+      case GLFW_KEY_H:
+      {
+        help();
+        return;
+      }
 
-  case GLFW_KEY_P:
-    if(! prog->GPUHas64BitSupport)
-    {
-      fprintf(stderr, "Your GPU does not support GL_ARB_gpu_shader_fp64!\n");
-      fflush(stdout);
-      break;
+      case GLFW_KEY_P:
+      {
+        if (!prog->GPUHas64BitSupport) {
+          fprintf(stderr, "Your GPU does not support GL_ARB_gpu_shader_fp64!\n");
+          fflush(stdout);
+          return;
+        }
+
+        if (prog->currentProgram == prog->program32bit) {
+          prog->currentProgram = prog->program64bit;
+        } else {
+          prog->currentProgram = prog->program32bit;
+        }
+        updateProgram(prog);
+
+        break;
+      }
+
+      default:
+        return;
     }
 
-    if(prog->currentProgram == prog->program32bit)
-    {
-      prog->currentProgram = prog->program64bit;
-    }
-    else
-    {
-      prog->currentProgram = prog->program32bit;
-    }
-    updateProgram(prog);
-
     render(&window);
-    break;
-
-  default:
-    break;
   }
 }
 

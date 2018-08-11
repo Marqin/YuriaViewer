@@ -8,6 +8,9 @@
 #include "shaders.h"
 #include "program.h"
 
+#define NUM_OF_TRIANGLES 6
+#define NUM_OF_VERTICES 12
+
 void error_callback(int error, const char *description);
 void key_callback(GLFWwindow *window, int key, int scancode, int action,
                   int mods);
@@ -69,48 +72,49 @@ void load(GLFWwindow **window)
   updateProgram(prog);
 }
 
+GLuint createUniformBufferObjects(const uniform_struct_t* uniformStruct) {
+  GLuint uniformBufferId;
+  glGenBuffers(1, &uniformBufferId);
+  glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(*uniformStruct), uniformStruct, GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+  glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
+  return uniformBufferId;
+}
+
+GLuint createVertexBufferObjects() {
+  GLfloat Vertices[NUM_OF_VERTICES] = {
+          -1.0f, -1.0f,
+          1.0f, -1.0f,
+          -1.0f,  1.0f,
+          -1.0f,  1.0f,
+          1.0f, -1.0f,
+          1.0f,  1.0f
+  };
+
+  GLuint vboId;
+  glGenBuffers(1, &vboId);
+  glBindBuffer(GL_ARRAY_BUFFER, vboId);
+  glBufferData(GL_ARRAY_BUFFER, NUM_OF_VERTICES * sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  return vboId;
+}
+
 void render(GLFWwindow **window)
 {
   pstates *prog = (pstates *) glfwGetWindowUserPointer(*window);
   if(prog == NULL)
     return; // need better error handling
 
-  GLuint vboId, uniformBufferId;
+  GLuint vboId = createVertexBufferObjects();
+  GLuint uniformBufferId = createUniformBufferObjects(&prog->uniformStruct);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // NOLINT(hicpp-signed-bitwise)
-
-  GLfloat Vertices[12] = {
-      -1.0f, -1.0f,
-       1.0f, -1.0f,
-      -1.0f,  1.0f,
-      -1.0f,  1.0f,
-       1.0f, -1.0f,
-       1.0f,  1.0f
-  };
-
-
-  // Vertex Buffer Objects
-  glGenBuffers(1, &vboId);
-  glBindBuffer(GL_ARRAY_BUFFER, vboId);
-  glBufferData(GL_ARRAY_BUFFER, 12*sizeof(GLfloat), Vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // Uniform Buffer Objects
-  glGenBuffers(1, &uniformBufferId);
-  glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(prog->uniformStruct), &prog->uniformStruct, GL_DYNAMIC_DRAW);
-  glBindBuffer(GL_UNIFORM_BUFFER, 0);
-  glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
-
-
-
-  // Draw
-  glDrawArrays(GL_TRIANGLES, 0, 6);//prog->h * prog->w);
+  glDrawArrays(GL_TRIANGLES, 0, NUM_OF_TRIANGLES);
   glfwSwapBuffers(*window);
 
-  // Free memory
   glDeleteBuffers(1, &vboId);
   glDeleteBuffers(1, &uniformBufferId);
 }
