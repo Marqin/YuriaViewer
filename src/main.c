@@ -8,12 +8,12 @@
 #include "shaders.h"
 #include "program.h"
 
-extern void error_callback(int error, const char *description);
-extern void key_callback(GLFWwindow *window, int key, int scancode, int action,
-                         int mods);
-extern void resize_callback(GLFWwindow *window, int width, int height);
-extern void iconify_callback(GLFWwindow *window, int iconified);
-extern void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset );
+void error_callback(int error, const char *description);
+void key_callback(GLFWwindow *window, int key, int scancode, int action,
+                  int mods);
+void resize_callback(GLFWwindow *window, int width, int height);
+void iconify_callback(GLFWwindow *window, int iconified);
+void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset );
 
 int init(GLFWwindow **window, uint32_t res[2])
 {
@@ -77,15 +77,15 @@ void render(GLFWwindow **window)
 
   GLuint vboId, uniformBufferId;
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // NOLINT(hicpp-signed-bitwise)
 
   GLfloat Vertices[12] = {
-      -1.0, -1.0,
-       1.0, -1.0,
-      -1.0,  1.0,
-      -1.0,  1.0,
-       1.0, -1.0,
-       1.0,  1.0
+      -1.0f, -1.0f,
+       1.0f, -1.0f,
+      -1.0f,  1.0f,
+      -1.0f,  1.0f,
+       1.0f, -1.0f,
+       1.0f,  1.0f
   };
 
 
@@ -181,7 +181,7 @@ int main(void)
   GLint n = 0;
   glGetIntegerv(GL_NUM_EXTENSIONS, &n);
   for (GLint i = 0; i < n; i++) {
-    const GLchar * ext = (GLchar *)glGetStringi(GL_EXTENSIONS, i);  // u -> sig!
+    const GLchar * ext = (GLchar *)glGetStringi(GL_EXTENSIONS, (GLuint)i);  // u -> sig!
     if (strcmp(ext, "GL_ARB_gpu_shader_fp64") == 0) {
       GL_double = true;
       break;

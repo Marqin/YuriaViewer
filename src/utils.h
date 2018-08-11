@@ -10,8 +10,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-int get_int(const char * const text, int32_t * i);
+int get_int(const char * text, int32_t * i);
 
-int get_float(const char * const text, float * f);
+int get_float(const char * text, float * f);
 
 pstates init_pstates();

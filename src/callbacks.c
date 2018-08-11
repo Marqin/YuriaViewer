@@ -7,10 +7,10 @@
 #include "includes.h"
 #include "program.h"
 
-extern void help(void);
-extern void render(GLFWwindow **window);
+void help(void);
+void render(GLFWwindow **window);
 
-extern void error_callback(int error, const char *description)
+void error_callback(int error, const char *description)
 {
   printf("%d: %s\n", error, description);
 }
@@ -38,11 +38,11 @@ void scroll_callback(GLFWwindow* window, double xoffset _UNUSED_, double yoffset
   yoffset = neg ? 1.0/yoffset : yoffset;
 
   prog->uniformStruct.zoom_64 *= yoffset;
-  prog->uniformStruct.zoom_32 = prog->uniformStruct.zoom_64;
+  prog->uniformStruct.zoom_32 = (float)prog->uniformStruct.zoom_64;
   render(&window);
 }
 
-extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
+void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
                          int action, int mods _UNUSED_)
 {
   if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -56,13 +56,13 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
   {
   case GLFW_KEY_Z:
     prog->uniformStruct.zoom_64 *= 2.0;
-    prog->uniformStruct.zoom_32 = prog->uniformStruct.zoom_64;
+    prog->uniformStruct.zoom_32 = (float)prog->uniformStruct.zoom_64;
     render(&window);
     break;
 
   case GLFW_KEY_X:
     prog->uniformStruct.zoom_64 /= 2.0;
-    prog->uniformStruct.zoom_32 = prog->uniformStruct.zoom_64;
+    prog->uniformStruct.zoom_32 = (float)prog->uniformStruct.zoom_64;
     render(&window);
     break;
 
@@ -133,19 +133,19 @@ extern void key_callback(GLFWwindow *window, int key, int scancode _UNUSED_,
 }
 
 
-extern void resize_callback(GLFWwindow *window, int32_t width, int32_t height)
+void resize_callback(GLFWwindow *window, int width, int height)
 {
   pstates *prog = (pstates *) glfwGetWindowUserPointer(window);
   if(prog == NULL)
     return;
 
-  prog->uniformStruct.res[0] = width;
-  prog->uniformStruct.res[1] = height;
+  prog->uniformStruct.res[0] = width < 0 ? 0  : (uint32_t)width;
+  prog->uniformStruct.res[1] = height < 0 ? 0  : (uint32_t)height;
   glViewport(0, 0, (GLint)width, (GLint)height);
   render(&window);
 }
 
-extern void iconify_callback(GLFWwindow *window, int iconified)
+void iconify_callback(GLFWwindow *window, int iconified)
 {
   if(iconified == GL_FALSE)
     render(&window);

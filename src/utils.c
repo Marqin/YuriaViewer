@@ -6,7 +6,7 @@
 
 #include "includes.h"
 
-int get_int(const char * const text, int32_t * i)
+int get_int(const char * text, int32_t * i)
 {
   printf("%s", text);
   fflush(stdout);
@@ -14,7 +14,7 @@ int get_int(const char * const text, int32_t * i)
   return s;
 }
 
-int get_float(const char * const text, float * d)
+int get_float(const char * text, float * d)
 {
   printf("%s", text);
   fflush(stdout);

@@ -9,8 +9,5 @@
 
 #include <stdbool.h>
 
-GLchar * getShader (const char * const path);
-
-bool isOK( GLuint, const char * const );
-
-GLuint createShader(const char * const, GLenum);
+GLchar* getShader (const char*);
+GLuint createShader(const char*, GLenum);
