@@ -1,5 +1,7 @@
 # YuriaViewer
 
+[![Build Status](https://travis-ci.org/Marqin/YuriaViewer.svg?branch=master)](https://travis-ci.org/Marqin/YuriaViewer)
+
 Yuria Viewer is simple (yet) Julia set explorer written in C99.
 
 [click here for animated WebGL version](https://www.shadertoy.com/view/ldcSRX)
