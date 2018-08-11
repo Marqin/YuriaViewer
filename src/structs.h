@@ -7,12 +7,14 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <GL/glew.h>
 
 typedef struct uniform_struct {
   int32_t maxi, vis;
   uint32_t res[2];
-  float con[2], pos[2];
-  float zoom_32, offset;
+  float con[2];
+  float pos[2];
+  float zoom_32;
   double zoom_64;
 } uniform_struct_t;
 

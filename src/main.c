@@ -122,7 +122,7 @@ void render(GLFWwindow **window)
   // Uniform Buffer Objects
   glGenBuffers(1, &uniformBufferId);
   glBindBuffer(GL_UNIFORM_BUFFER, uniformBufferId);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(*prog), prog, GL_DYNAMIC_DRAW);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(prog->uniform), &prog->uniform, GL_DYNAMIC_DRAW);
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT_INDEX, uniformBufferId);
 
