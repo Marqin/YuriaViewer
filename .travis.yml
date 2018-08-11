@@ -27,8 +27,8 @@ matrix:
 addons:
   apt:
     sources:
-      - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
-      - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse'
+      - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse'
+      - sourceline: 'deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse'
     packages:
       - libglfw3-dev
       - libglew-dev
